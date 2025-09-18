@@ -1,0 +1,62 @@
+{
+  "name": "@react-timezone-range-picker/ui",
+  "version": "0.1.0",
+  "description": "React UI components for building timezone-aware date and time range pickers, powered by Mantine and designed for flexibility.",
+  "author": "Vaibhav Dangra vaibhav1180@gmail.com>",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "peerDependencies": {
+    "@mantine/core": "^8.3.1",
+    "@mantine/dates": "^8.3.1",
+    "@mantine/hooks": "^8.3.1",
+    "dayjs": "^1.11.18",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@mantine/core": "^8.3.1",
+    "@mantine/dates": "^8.3.1",
+    "@mantine/hooks": "^8.3.1",
+    "@tabler/icons-react": "^3.35.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.5.0",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "add": "^2.0.6",
+    "dayjs": "^1.11.18",
+    "eslint": "^9.35.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "jsdom": "^27.0.0",
+    "react-use": "^17.6.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  }
+}
