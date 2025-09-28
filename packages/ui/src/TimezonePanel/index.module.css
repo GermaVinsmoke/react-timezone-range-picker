@@ -1,0 +1,8 @@
+.timezone-panel-container {
+  height: 100%;
+}
+
+.list-container {
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
