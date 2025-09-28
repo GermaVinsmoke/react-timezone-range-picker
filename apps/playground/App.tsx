@@ -1,9 +1,13 @@
-import { TimezonePanel } from "@react-timezone-range-picker/ui";
+import {
+  TimezoneRangePicker,
+  TimezonePanel,
+} from "@react-timezone-range-picker/ui";
 
 function App() {
   return (
     <div>
-      <TimezonePanel />
+      <TimezoneRangePicker />
+      {/* <TimezonePanel /> */}
     </div>
   );
 }
