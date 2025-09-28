@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Flex } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 import { useDebounce } from "react-use";
 import { TimezoneList } from "./components/TimezoneList";
 import { TimezoneSearch } from "./components/TimezoneSearch";
 import { getTimezones } from "./util/getTimezones";
+import styled from "./index.module.css";
+import { getBrowserTimezone } from "./util/getBrowserTimezone";
 
 // TODO - Should pass timezone value from playground app as our selection value
 // TODO - Should also have a way in which it shows selected/default timezone (by browser)
@@ -48,21 +50,36 @@ const TimezonePanel = () => {
     [searchText]
   );
 
+  const browserTimezone = useMemo(() => getBrowserTimezone(), []);
+
   return (
-    <Flex direction="column">
+    <Flex direction="column" flex={2} style={{ height: "100%" }}>
       <TimezoneSearch searchText={searchText} setSearchText={setSearchText} />
-      <Flex direction={"column"}>
-        {filteredTimezones.map((timezone, idx) => (
+      <Box style={{ overflowY: "scroll" }}>
+        <Text fw={600}>MY LOCATION</Text>
+        <Flex direction="column">
           <TimezoneList
-            key={idx}
-            name={timezone.name}
-            longName={timezone.longName}
-            currentTime={timezone.currentTime}
-            utcOffset={timezone.utcOffset}
-            handleTimezoneMouseClick={handleTimezoneMouseClick}
+            isBrowserTimezone
+            name={browserTimezone.name}
+            longName={browserTimezone.longName}
+            currentTime={browserTimezone.currentTime}
+            utcOffset={browserTimezone.utcOffset}
           />
-        ))}
-      </Flex>
+        </Flex>
+        <Text fw={600}>LOCATIONS</Text>
+        <Flex direction={"column"} className={styled["list-container"]}>
+          {filteredTimezones.map((timezone, idx) => (
+            <TimezoneList
+              key={idx}
+              name={timezone.name}
+              longName={timezone.longName}
+              currentTime={timezone.currentTime}
+              utcOffset={timezone.utcOffset}
+              handleTimezoneMouseClick={handleTimezoneMouseClick}
+            />
+          ))}
+        </Flex>
+      </Box>
     </Flex>
   );
 };
