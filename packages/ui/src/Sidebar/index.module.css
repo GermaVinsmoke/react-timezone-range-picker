@@ -1,0 +1,14 @@
+.sidebar-container {
+  border-right: 1px solid #ddd;
+  margin-right: 0.75rem;
+}
+
+.sidebar-row {
+  display: flex;
+  margin-bottom: 1rem;
+  cursor: pointer;
+
+  & > svg {
+    margin-right: 0.5rem;
+  }
+}
