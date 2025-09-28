@@ -1,5 +1,6 @@
 import { Flex, Text } from "@mantine/core";
 import { FC } from "react";
+import clsx from "clsx";
 import styled from "./index.module.css";
 
 interface ITimezoneList {
@@ -7,7 +8,8 @@ interface ITimezoneList {
   longName: string;
   currentTime: string;
   utcOffset: string;
-  handleTimezoneMouseClick: (name: string) => void;
+  isBrowserTimezone?: boolean;
+  handleTimezoneMouseClick?: (name: string) => void;
 }
 
 export const TimezoneList: FC<ITimezoneList> = ({
@@ -15,21 +17,28 @@ export const TimezoneList: FC<ITimezoneList> = ({
   longName,
   currentTime,
   utcOffset,
-  handleTimezoneMouseClick,
+  isBrowserTimezone = false,
+  handleTimezoneMouseClick = undefined,
 }) => {
   const onClick = () => {
-    handleTimezoneMouseClick(name);
+    if (isBrowserTimezone) return;
+
+    handleTimezoneMouseClick!(name);
   };
 
   return (
-    <Flex direction="column" className={styled.row} onClick={onClick}>
+    <Flex
+      direction="column"
+      className={clsx(styled.row, isBrowserTimezone ? styled["row-active"] : styled["row-select"])}
+      onClick={onClick}
+    >
       <Flex justify="space-between">
         <Text>{name}</Text>
         <Text>
           {currentTime} • UTC{utcOffset}
         </Text>
       </Flex>
-      <Text>{longName}</Text>
+      <Text size="sm">{longName}</Text>
     </Flex>
   );
 };
