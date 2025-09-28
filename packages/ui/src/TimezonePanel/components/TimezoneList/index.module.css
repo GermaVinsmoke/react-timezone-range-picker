@@ -1,6 +1,14 @@
 .row {
+  padding: 0.4rem;
+}
+
+.row-select {
   &:hover {
     background-color: #f5f5f5;
     cursor: pointer;
   }
+}
+
+.row-active {
+  background-color: rgba(173, 216, 230, 0.7);
 }
