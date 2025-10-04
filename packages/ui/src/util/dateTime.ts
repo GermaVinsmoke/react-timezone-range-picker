@@ -1,3 +1,8 @@
-export const getCurrentTime = () => new Date().toTimeString().slice(0, 8);
+import dayjs from "dayjs";
 
-export const getCurrentDate = () => new Date().toISOString().slice(0, 10);
+export const getCurrentTime = () => dayjs().format("HH:mm:ss");
+
+export const getCurrentDate = () => dayjs().format("YYYY-MM-DD");
+
+export const getCurrentPlusDate = (amount: number) =>
+  dayjs().add(amount, "day").format("YYYY-MM-DD");
