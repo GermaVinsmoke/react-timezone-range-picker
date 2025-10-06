@@ -4,11 +4,10 @@
 }
 
 .sidebar-row {
-  display: flex;
   margin-bottom: 1rem;
   cursor: pointer;
 
-  & > svg {
+  & > div > svg {
     margin-right: 0.5rem;
   }
 }

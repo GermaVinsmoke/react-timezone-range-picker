@@ -33,7 +33,7 @@ export const TimezoneRangePicker = () => {
       <Popover.Target>
         <Button>Toggle popover</Button>
       </Popover.Target>
-      <Popover.Dropdown style={{ width: 600, height: 400 }}>
+      <Popover.Dropdown style={{ width: 700, height: 400 }}>
         <Flex style={{ height: "100%" }}>
           <Sidebar setSelectedPanel={setSelectedPanel} />
           {renderPanel()}
