@@ -4,7 +4,6 @@
 }
 
 .sidebar-row {
-  margin-bottom: 1rem;
   cursor: pointer;
 
   & > div > svg {
