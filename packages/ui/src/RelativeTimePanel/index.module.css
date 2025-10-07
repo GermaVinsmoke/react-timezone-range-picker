@@ -1,0 +1,11 @@
+.relative-time-panel-container {
+  height: calc(100% - 120px - 36px);
+  overflow-y: auto;
+}
+
+.time-row {
+  &:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+}
