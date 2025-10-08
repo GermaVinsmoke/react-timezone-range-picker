@@ -10,8 +10,8 @@ interface ITimezoneSearch {
 export const TimezoneSearch: FC<ITimezoneSearch> = ({ searchText, setSearchText }) => {
   return (
     <Input
-      placeholder="Search by city or country"
-      leftSection={<IconFilter2 stroke={2} color="#313B49" />}
+      placeholder="Timezone search (Asia, Tokyo, +09:00, etc)"
+      leftSection={<IconFilter2 stroke={2} />}
       value={searchText}
       onChange={(e) => setSearchText(e.currentTarget.value)}
     />

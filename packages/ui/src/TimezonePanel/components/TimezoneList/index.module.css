@@ -2,13 +2,16 @@
   padding: 0.4rem;
 }
 
-.row-select {
+.row-dark {
+  cursor: pointer;
   &:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
+    background-color: #3a3a3a;
   }
 }
 
-.row-active {
-  background-color: rgba(173, 216, 230, 0.7);
+.row-light {
+  cursor: pointer;
+  &:hover {
+    background-color: #f3f4f6;
+  }
 }

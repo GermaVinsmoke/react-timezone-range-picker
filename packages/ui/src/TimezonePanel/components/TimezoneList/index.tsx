@@ -2,6 +2,7 @@ import { Flex, Text } from "@mantine/core";
 import { FC } from "react";
 import clsx from "clsx";
 import styled from "./index.module.css";
+import { useAppTheme } from "../../../hooks/useAppTheme";
 
 interface ITimezoneList {
   name: string;
@@ -20,6 +21,8 @@ export const TimezoneList: FC<ITimezoneList> = ({
   isBrowserTimezone = false,
   handleTimezoneMouseClick = undefined,
 }) => {
+  const { colorScheme } = useAppTheme();
+
   const onClick = () => {
     if (isBrowserTimezone) return;
 
@@ -29,7 +32,14 @@ export const TimezoneList: FC<ITimezoneList> = ({
   return (
     <Flex
       direction="column"
-      className={clsx(styled.row, isBrowserTimezone ? styled["row-active"] : styled["row-select"])}
+      className={clsx(
+        styled.row,
+        isBrowserTimezone
+          ? undefined
+          : colorScheme === "dark"
+          ? styled["row-dark"]
+          : styled["row-light"]
+      )}
       onClick={onClick}
     >
       <Flex justify="space-between">
