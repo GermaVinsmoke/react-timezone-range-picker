@@ -8,6 +8,7 @@ import styled from "./index.module.css";
 import { getBrowserTimezone } from "./util/getBrowserTimezone";
 import { Footer } from "../Footer";
 import { TimezoneData } from "../interfaces";
+import dayjs from "dayjs";
 
 // TODO - Should pass timezone value from playground app as our selection value
 // TODO - Should also have a way in which it shows selected/default timezone (by browser)
@@ -80,10 +81,10 @@ const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
           <Flex direction="column">
             <TimezoneList
               isBrowserTimezone
-              name={browserTimezone.name}
-              longName={browserTimezone.longName}
-              currentTime={browserTimezone.currentTime}
-              utcOffset={browserTimezone.utcOffset}
+              name={timezone.name}
+              longName={timezone.longName}
+              currentTime={dayjs().tz(timezone.name).format("h:mm A")}
+              utcOffset={timezone.utcOffset}
               selectedTimezone={selectedTimezone}
             />
           </Flex>
