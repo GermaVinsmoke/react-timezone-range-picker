@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { useDebounce } from "react-use";
 import { TimezoneList } from "./components/TimezoneList";
@@ -7,11 +7,12 @@ import { getTimezones } from "./util/getTimezones";
 import styled from "./index.module.css";
 import { getBrowserTimezone } from "./util/getBrowserTimezone";
 import { Footer } from "../Footer";
+import { TimezoneData } from "../interfaces";
 
 // TODO - Should pass timezone value from playground app as our selection value
 // TODO - Should also have a way in which it shows selected/default timezone (by browser)
 
-interface ITimezoneData {
+interface ITimezoneDataInternal {
   name: string;
   longName: string;
   currentTime: string;
@@ -19,14 +20,15 @@ interface ITimezoneData {
   offsetMinutes: number;
 }
 
-const TimezonePanel = () => {
-  const [selectedTimezone, setSelectedTimezone] = useState("");
-  const [filteredTimezones, setFilteredTimezones] = useState<ITimezoneData[]>([]);
-  const [searchText, setSearchText] = useState("");
+interface ITimezonePanel {
+  timezone: TimezoneData;
+  setTimezone: Dispatch<SetStateAction<TimezoneData>>;
+}
 
-  const handleTimezoneMouseClick = (name: string) => {
-    setSelectedTimezone(name);
-  };
+const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
+  const [selectedTimezone, setSelectedTimezone] = useState<TimezoneData>(timezone);
+  const [filteredTimezones, setFilteredTimezones] = useState<ITimezoneDataInternal[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   const timezones = useMemo(() => getTimezones(), []);
 
@@ -57,6 +59,14 @@ const TimezonePanel = () => {
 
   const browserTimezone = useMemo(() => getBrowserTimezone(), []);
 
+  const handleTimezoneMouseClick = (selectedTimezone: TimezoneData) => {
+    setSelectedTimezone(selectedTimezone);
+  };
+
+  const handleApply = () => {
+    setTimezone(selectedTimezone);
+  };
+
   return (
     <Flex direction="column" flex={2} justify={"space-between"} style={{ height: "100%" }}>
       <Flex direction="column" style={{ height: "calc(100% - 40px)" }}>
@@ -74,19 +84,21 @@ const TimezonePanel = () => {
               longName={browserTimezone.longName}
               currentTime={browserTimezone.currentTime}
               utcOffset={browserTimezone.utcOffset}
+              selectedTimezone={selectedTimezone}
             />
           </Flex>
           <Text fw={600} px={12}>
             Locations
           </Text>
           <Flex direction={"column"} className={styled["list-container"]}>
-            {filteredTimezones.map((timezone, idx) => (
+            {filteredTimezones.map((tz, idx) => (
               <TimezoneList
                 key={idx}
-                name={timezone.name}
-                longName={timezone.longName}
-                currentTime={timezone.currentTime}
-                utcOffset={timezone.utcOffset}
+                name={tz.name}
+                longName={tz.longName}
+                currentTime={tz.currentTime}
+                utcOffset={tz.utcOffset}
+                selectedTimezone={selectedTimezone}
                 handleTimezoneMouseClick={handleTimezoneMouseClick}
               />
             ))}
@@ -94,7 +106,7 @@ const TimezonePanel = () => {
         </Box>
       </Flex>
       <Box px={12}>
-        <Footer />
+        <Footer handleApplyClick={handleApply} />
       </Box>
     </Flex>
   );

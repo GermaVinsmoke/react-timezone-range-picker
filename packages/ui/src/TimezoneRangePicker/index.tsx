@@ -4,7 +4,8 @@ import { TimezonePanel } from "../TimezonePanel";
 import { Sidebar } from "../Sidebar";
 import { AroundTimePanel } from "../AroundTimePanel";
 import { StartEndTimePanel } from "../StartEndTimePanel";
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { TimezoneData } from "../interfaces";
 
 export enum Panel {
   START_END_TIME = "Start and end times",
@@ -12,17 +13,22 @@ export enum Panel {
   TIMEZONE = "Time zone",
 }
 
-export const TimezoneRangePicker = () => {
+interface ITimezoneRangePicker {
+  timezone: TimezoneData;
+  setTimezone: Dispatch<SetStateAction<TimezoneData>>;
+}
+
+export const TimezoneRangePicker: FC<ITimezoneRangePicker> = ({ timezone, setTimezone }) => {
   const [selectedPanel, setSelectedPanel] = useState<Panel>(Panel.START_END_TIME);
 
   const renderPanel = () => {
     switch (selectedPanel) {
       case Panel.START_END_TIME:
-        return <StartEndTimePanel />;
+        return <StartEndTimePanel timezone={timezone} />;
       case Panel.AROUND_TIME:
-        return <AroundTimePanel />;
+        return <AroundTimePanel timezone={timezone} />;
       case Panel.TIMEZONE:
-        return <TimezonePanel />;
+        return <TimezonePanel timezone={timezone} setTimezone={setTimezone} />;
       default:
         return null;
     }
