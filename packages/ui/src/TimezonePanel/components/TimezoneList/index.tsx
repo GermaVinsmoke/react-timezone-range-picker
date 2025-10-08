@@ -38,13 +38,18 @@ export const TimezoneList: FC<ITimezoneList> = ({
           ? undefined
           : colorScheme === "dark"
           ? styled["row-dark"]
-          : styled["row-light"]
+          : styled["row-light"],
+        selectedTimezone.name === name
+          ? colorScheme === "dark"
+            ? styled["row-selected-dark"]
+            : styled["row-selected-light"]
+          : undefined
       )}
       onClick={onClick}
     >
       <Flex justify="space-between">
-        <Text>{name}</Text>
-        <Text>
+        <Text size="sm">{name}</Text>
+        <Text size="sm">
           {currentTime} • UTC{utcOffset}
         </Text>
       </Flex>
