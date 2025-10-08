@@ -1,12 +1,15 @@
 import { ITimeOptions, TIME_OPTIONS } from "./timeOptions";
 import { Box, Flex, Input, Text } from "@mantine/core";
 import styled from "./index.module.css";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useDebounce } from "react-use";
+import clsx from "clsx";
+import { useAppTheme } from "../hooks/useAppTheme";
 
 export const RelativeTimePanel = () => {
   const [filteredOptions, setFilteredOptions] = useState<ITimeOptions[]>(TIME_OPTIONS);
   const [searchText, setSearchText] = useState("");
+  const { colorScheme } = useAppTheme();
 
   useDebounce(
     () => {
@@ -26,7 +29,7 @@ export const RelativeTimePanel = () => {
 
   return (
     <>
-      <Box pr={8}>
+      <Box style={{ width: "90%" }} mx={"auto"}>
         <Input
           placeholder="Relative time (15m, 1h, 1d, 1w)"
           //   leftSection={<IconFilter2 stroke={2} color="#313B49" />}
@@ -40,9 +43,12 @@ export const RelativeTimePanel = () => {
             key={op.label}
             align={"center"}
             justify={"space-between"}
-            className={styled["time-row"]}
-            mr={8}
+            className={clsx(
+              colorScheme === "dark" ? styled["time-row-dark"] : styled["time-row-light"],
+              styled["time-row"]
+            )}
             py={4}
+            px={12}
             mb={op.lineBreak ? 8 : 0}
           >
             <Text size="sm">{op.label}</Text>

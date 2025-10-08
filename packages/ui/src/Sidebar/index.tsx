@@ -23,6 +23,7 @@ export const Sidebar: FC<ISidebar> = ({ setSelectedPanel }) => {
           className={styled["sidebar-row"]}
           justify={"space-between"}
           align={"center"}
+          px={12}
           onClick={() => setSelectedPanel(Panel.START_END_TIME)}
         >
           <Flex align={"center"}>
@@ -35,6 +36,7 @@ export const Sidebar: FC<ISidebar> = ({ setSelectedPanel }) => {
           className={styled["sidebar-row"]}
           justify={"space-between"}
           align={"center"}
+          px={12}
           onClick={() => setSelectedPanel(Panel.AROUND_TIME)}
         >
           <Flex align={"center"}>
@@ -47,6 +49,7 @@ export const Sidebar: FC<ISidebar> = ({ setSelectedPanel }) => {
           className={styled["sidebar-row"]}
           justify={"space-between"}
           align={"center"}
+          px={12}
           onClick={() => setSelectedPanel(Panel.TIMEZONE)}
         >
           <Flex align={"center"}>

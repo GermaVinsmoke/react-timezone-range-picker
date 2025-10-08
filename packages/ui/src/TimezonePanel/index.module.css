@@ -4,5 +4,6 @@
 
 .list-container {
   overflow-y: auto;
+  height: inherit;
   margin-top: 0.5rem;
 }
