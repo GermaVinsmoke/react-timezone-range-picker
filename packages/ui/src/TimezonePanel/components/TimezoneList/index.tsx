@@ -3,14 +3,16 @@ import { FC } from "react";
 import clsx from "clsx";
 import styled from "./index.module.css";
 import { useAppTheme } from "../../../hooks/useAppTheme";
+import { TimezoneData } from "packages/ui/src/interfaces";
 
 interface ITimezoneList {
   name: string;
   longName: string;
   currentTime: string;
   utcOffset: string;
+  selectedTimezone: TimezoneData;
   isBrowserTimezone?: boolean;
-  handleTimezoneMouseClick?: (name: string) => void;
+  handleTimezoneMouseClick?: (selectedTimezone: TimezoneData) => void;
 }
 
 export const TimezoneList: FC<ITimezoneList> = ({
@@ -18,6 +20,7 @@ export const TimezoneList: FC<ITimezoneList> = ({
   longName,
   currentTime,
   utcOffset,
+  selectedTimezone,
   isBrowserTimezone = false,
   handleTimezoneMouseClick = undefined,
 }) => {
@@ -26,7 +29,11 @@ export const TimezoneList: FC<ITimezoneList> = ({
   const onClick = () => {
     if (isBrowserTimezone) return;
 
-    handleTimezoneMouseClick!(name);
+    handleTimezoneMouseClick!({
+      name,
+      longName,
+      utcOffset,
+    });
   };
 
   return (
