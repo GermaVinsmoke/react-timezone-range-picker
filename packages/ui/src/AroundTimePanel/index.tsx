@@ -1,11 +1,16 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Box, Flex, Select, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import { getCurrentDate, getCurrentTime } from "../util/dateTime";
 import { Footer } from "../Footer";
+import { TimezoneData } from "../interfaces";
 
-const AroundTimePanel = () => {
+interface IAroundTimePanel {
+  timezone: TimezoneData;
+}
+
+const AroundTimePanel: FC<IAroundTimePanel> = ({ timezone }) => {
   const [dateValue, setDateValue] = useState<string | null>(getCurrentDate());
   const [timeValue, setTimeValue] = useState<string>(getCurrentTime());
   const [duration, setDuration] = useState<string | null>("± 1 day");
@@ -37,8 +42,8 @@ const AroundTimePanel = () => {
             onChange={handleTimeChange}
             leftSection={<IconClock stroke={1.5} />}
             rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>
-                Hawaii-Aleutian Standard Time
+              <Text style={{ fontSize: 12, fontStyle: "italic", textAlign: "right" }}>
+                {timezone.longName}
               </Text>
             }
             rightSectionWidth={180}

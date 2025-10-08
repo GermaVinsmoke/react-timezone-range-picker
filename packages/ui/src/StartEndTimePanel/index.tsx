@@ -1,12 +1,17 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import { getCurrentDate, getCurrentPlusDate, getCurrentTime } from "../util/dateTime";
 import dayjs from "dayjs";
 import { Footer } from "../Footer";
+import { TimezoneData } from "../interfaces";
 
-const StartEndTimePanel = () => {
+interface IStartEndTimePanel {
+  timezone: TimezoneData;
+}
+
+const StartEndTimePanel: FC<IStartEndTimePanel> = ({ timezone }) => {
   const [startDateValue, setStartDateValue] = useState<string | null>(getCurrentDate());
   const [startTimeValue, setStartTimeValue] = useState<string>(getCurrentTime());
   const [endDateValue, setEndDateValue] = useState<string | null>(getCurrentPlusDate(30));
@@ -40,9 +45,7 @@ const StartEndTimePanel = () => {
             onChange={handleStartTimeChange}
             leftSection={<IconClock stroke={1.5} />}
             rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>
-                Hawaii-Aleutian Standard Time
-              </Text>
+              <Text style={{ fontSize: 12, fontStyle: "italic" }}>{timezone.longName}</Text>
             }
             rightSectionWidth={180}
             rightSectionProps={{
@@ -66,9 +69,7 @@ const StartEndTimePanel = () => {
             onChange={handleEndTimeChange}
             leftSection={<IconClock stroke={1.5} />}
             rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>
-                Hawaii-Aleutian Standard Time
-              </Text>
+              <Text style={{ fontSize: 12, fontStyle: "italic" }}>{timezone.longName}</Text>
             }
             rightSectionWidth={180}
             rightSectionProps={{
