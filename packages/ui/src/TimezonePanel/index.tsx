@@ -65,7 +65,7 @@ const TimezonePanel = () => {
         </Box>
         <Box style={{ overflowY: "scroll" }}>
           <Text fw={600} px={12}>
-            MY LOCATION
+            My Location
           </Text>
           <Flex direction="column">
             <TimezoneList
@@ -77,7 +77,7 @@ const TimezonePanel = () => {
             />
           </Flex>
           <Text fw={600} px={12}>
-            LOCATIONS
+            Locations
           </Text>
           <Flex direction={"column"} className={styled["list-container"]}>
             {filteredTimezones.map((timezone, idx) => (
