@@ -18,3 +18,29 @@ export const getPopoverButtonText = (tzRange: TzRange) => {
     tzRange.endDate
   ).format("YYYY/MM/DD")} ${tzRange.endTime} (${getShortTimezoneName(tzRange.timezone.name)})`;
 };
+
+export const getPastDateTime = (
+  date: string | null,
+  time: string,
+  amount: number,
+  unit: dayjs.ManipulateType
+) => {
+  const d = dayjs(`${date} ${time}`).subtract(amount, unit);
+  return {
+    date: d.format("YYYY-MM-DD"),
+    time: d.format("HH:mm:ss"),
+  };
+};
+
+export const getFutureDateTime = (
+  date: string | null,
+  time: string,
+  amount: number,
+  unit: dayjs.ManipulateType
+) => {
+  const d = dayjs(`${date} ${time}`).add(amount, unit);
+  return {
+    date: d.format("YYYY-MM-DD"),
+    time: d.format("HH:mm:ss"),
+  };
+};
