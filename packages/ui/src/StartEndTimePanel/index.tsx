@@ -24,8 +24,6 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
   });
 
   const onSubmit = (values: typeof form.values) => {
-    console.log(values);
-
     tzRange.onApply({
       startDate: values.startDate,
       startTime: values.startTime,
