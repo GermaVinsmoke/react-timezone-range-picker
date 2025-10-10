@@ -1,5 +1,5 @@
 {
-  "name": "react-timezone-range-picker",
+  "name": "react-timezone-range-picker-monorepo",
   "private": true,
   "scripts": {
     "build": "pnpm -r build",

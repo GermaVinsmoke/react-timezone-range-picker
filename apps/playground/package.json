@@ -12,7 +12,7 @@
     "@mantine/core": "^8.3.1",
     "@mantine/dates": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
-    "@react-timezone-range-picker/ui": "workspace:*",
+    "react-timezone-range-picker": "workspace:*",
     "add": "^2.0.6",
     "dayjs": "^1.11.18",
     "react": "^19.1.1",
