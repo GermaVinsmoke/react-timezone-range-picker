@@ -50,7 +50,7 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
               key={form.key("date")}
               {...form.getInputProps("date")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="DD/MM/YYYY"
+              valueFormat="YYYY/MM/DD"
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput
