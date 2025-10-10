@@ -1,86 +1,102 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import { getCurrentDate, getCurrentPlusDate, getCurrentTime } from "../util/dateTime";
-import dayjs from "dayjs";
 import { Footer } from "../Footer";
-import { TimezoneData } from "../interfaces";
+import { TzRange } from "../interfaces";
+import { useForm } from "@mantine/form";
+import styled from "../styles/index.module.css";
 
 interface IStartEndTimePanel {
-  timezone: TimezoneData;
+  tzRange: TzRange;
 }
 
-const StartEndTimePanel: FC<IStartEndTimePanel> = ({ timezone }) => {
-  const [startDateValue, setStartDateValue] = useState<string | null>(getCurrentDate());
-  const [startTimeValue, setStartTimeValue] = useState<string>(getCurrentTime());
-  const [endDateValue, setEndDateValue] = useState<string | null>(getCurrentPlusDate(30));
-  const [endTimeValue, setEndTimeValue] = useState<string>(getCurrentTime());
+const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      startDate: getCurrentDate(),
+      startTime: getCurrentTime(),
+      endDate: getCurrentPlusDate(30),
+      endTime: getCurrentTime(),
+    },
+  });
 
-  const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setStartTimeValue(e.currentTarget.value);
-  };
+  const onSubmit = (values: typeof form.values) => {
+    console.log(values);
 
-  const handleEndTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEndTimeValue(e.currentTarget.value);
+    tzRange.onApply({
+      startDate: values.startDate,
+      startTime: values.startTime,
+      endDate: values.endDate,
+      endTime: values.endTime,
+      timezone: tzRange.timezone,
+    });
   };
 
   return (
-    <Flex direction="column" flex={2} justify={"space-between"} style={{ height: "100%" }} px={12}>
-      <Box>
-        <Text fw={600}>Start and end times</Text>
-        <Flex direction="column" gap={8} mt={12}>
-          <DatePickerInput
-            label="Start time"
-            value={startDateValue}
-            onChange={setStartDateValue}
-            popoverProps={{ withinPortal: false }}
-            valueFormat="DD/MM/YYYY"
-            leftSection={<IconCalendar stroke={1.5} />}
-          />
-          <TimeInput
-            withSeconds
-            defaultValue={getCurrentTime()}
-            value={startTimeValue}
-            onChange={handleStartTimeChange}
-            leftSection={<IconClock stroke={1.5} />}
-            rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>{timezone.longName}</Text>
-            }
-            rightSectionWidth={180}
-            rightSectionProps={{
-              style: {
-                paddingRight: 1,
-              },
-            }}
-          />
-          <DatePickerInput
-            label="End time"
-            value={endDateValue}
-            onChange={setEndDateValue}
-            popoverProps={{ withinPortal: false }}
-            valueFormat="DD/MM/YYYY"
-            leftSection={<IconCalendar stroke={1.5} />}
-          />
-          <TimeInput
-            withSeconds
-            defaultValue={getCurrentTime()}
-            value={endTimeValue}
-            onChange={handleEndTimeChange}
-            leftSection={<IconClock stroke={1.5} />}
-            rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic" }}>{timezone.longName}</Text>
-            }
-            rightSectionWidth={180}
-            rightSectionProps={{
-              style: {
-                paddingRight: 1,
-              },
-            }}
-          />
-        </Flex>
-      </Box>
-      <Footer />
+    <Flex direction="column" flex={2} style={{ height: "100%" }} px={12}>
+      <form className={styled["form-container"]} onSubmit={form.onSubmit(onSubmit)}>
+        <Box>
+          <Text fw={600}>Start and end times</Text>
+          <Flex direction="column" gap={8} mt={12}>
+            <DatePickerInput
+              label="Start time"
+              key={form.key("startDate")}
+              {...form.getInputProps("startDate")}
+              popoverProps={{ withinPortal: false }}
+              valueFormat="DD/MM/YYYY"
+              leftSection={<IconCalendar stroke={1.5} />}
+            />
+            <TimeInput
+              withSeconds
+              defaultValue={getCurrentTime()}
+              key={form.key("startTime")}
+              {...form.getInputProps("startTime")}
+              leftSection={<IconClock stroke={1.5} />}
+              rightSection={
+                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                  {tzRange.timezone?.longName}
+                </Text>
+              }
+              rightSectionWidth={180}
+              rightSectionProps={{
+                style: {
+                  paddingRight: 1,
+                },
+              }}
+            />
+            <DatePickerInput
+              label="End time"
+              key={form.key("endDate")}
+              {...form.getInputProps("endDate")}
+              popoverProps={{ withinPortal: false }}
+              valueFormat="DD/MM/YYYY"
+              leftSection={<IconCalendar stroke={1.5} />}
+            />
+            <TimeInput
+              withSeconds
+              defaultValue={getCurrentTime()}
+              key={form.key("endTime")}
+              {...form.getInputProps("endTime")}
+              leftSection={<IconClock stroke={1.5} />}
+              rightSection={
+                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                  {tzRange.timezone?.longName}
+                </Text>
+              }
+              rightSectionWidth={180}
+              rightSectionProps={{
+                style: {
+                  paddingRight: 1,
+                },
+              }}
+            />
+          </Flex>
+        </Box>
+        <Footer />
+      </form>
     </Flex>
   );
 };

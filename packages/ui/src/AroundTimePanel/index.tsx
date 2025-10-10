@@ -1,76 +1,90 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC } from "react";
 import { Box, Flex, Select, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import { getCurrentDate, getCurrentTime } from "../util/dateTime";
 import { Footer } from "../Footer";
-import { TimezoneData } from "../interfaces";
+import { TzRange } from "../interfaces";
+import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
+import styled from "../styles/index.module.css";
+import { useForm } from "@mantine/form";
 
 interface IAroundTimePanel {
-  timezone: TimezoneData;
+  tzRange: TzRange;
 }
 
-const AroundTimePanel: FC<IAroundTimePanel> = ({ timezone }) => {
-  const [dateValue, setDateValue] = useState<string | null>(getCurrentDate());
-  const [timeValue, setTimeValue] = useState<string>(getCurrentTime());
-  const [duration, setDuration] = useState<string | null>("± 1 day");
+const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
+  const form = useForm({
+    initialValues: {
+      date: getCurrentDate(),
+      time: getCurrentTime(),
+      duration: TimeOption.OneDay,
+    },
+  });
 
-  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeValue(e.currentTarget.value);
+  const onSubmit = (values: typeof form.values) => {
+    const { startDate, startTime, endDate, endTime } = getStartEndDateTime(
+      values.date,
+      values.time,
+      values.duration
+    );
+
+    tzRange.onApply({
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      timezone: tzRange.timezone,
+    });
   };
 
   return (
     <Flex direction="column" flex={2} justify={"space-between"} style={{ height: "100%" }} px={12}>
-      <Box>
-        <Text fw={600}>Around a time</Text>
-        <Flex direction="column" gap={8} mt={12}>
-          <DatePickerInput
-            label="Pick date"
-            placeholder="Pick date"
-            value={dateValue}
-            onChange={setDateValue}
-            popoverProps={{ withinPortal: false }}
-            valueFormat="DD/MM/YYYY"
-            leftSection={<IconCalendar stroke={1.5} />}
-          />
-          <TimeInput
-            label="Pick time"
-            placeholder="Pick time"
-            withSeconds
-            defaultValue={getCurrentTime()}
-            value={timeValue}
-            onChange={handleTimeChange}
-            leftSection={<IconClock stroke={1.5} />}
-            rightSection={
-              <Text style={{ fontSize: 12, fontStyle: "italic", textAlign: "right" }}>
-                {timezone.longName}
-              </Text>
-            }
-            rightSectionWidth={180}
-            rightSectionProps={{
-              style: {
-                paddingRight: 1,
-              },
-            }}
-          />
-          <Select
-            label="Duration"
-            placeholder="Pick value"
-            data={[
-              "± 30 seconds",
-              "± 1 minute",
-              "± 15 minutes",
-              "± 30 minutes",
-              "± 1 hour",
-              "± 1 day",
-            ]}
-            value={duration}
-            onChange={setDuration}
-            comboboxProps={{ withinPortal: false }}
-          />
-        </Flex>
-      </Box>
-      <Footer />
+      <form className={styled["form-container"]} onSubmit={form.onSubmit(onSubmit)}>
+        <Box>
+          <Text fw={600}>Around a time</Text>
+          <Flex direction="column" gap={8} mt={12}>
+            <DatePickerInput
+              label="Pick date"
+              placeholder="Pick date"
+              key={form.key("date")}
+              {...form.getInputProps("date")}
+              popoverProps={{ withinPortal: false }}
+              valueFormat="DD/MM/YYYY"
+              leftSection={<IconCalendar stroke={1.5} />}
+            />
+            <TimeInput
+              label="Pick time"
+              placeholder="Pick time"
+              withSeconds
+              defaultValue={getCurrentTime()}
+              key={form.key("time")}
+              {...form.getInputProps("time")}
+              leftSection={<IconClock stroke={1.5} />}
+              rightSection={
+                <Text style={{ fontSize: 12, fontStyle: "italic", textAlign: "right" }}>
+                  {tzRange.timezone?.longName}
+                </Text>
+              }
+              rightSectionWidth={180}
+              rightSectionProps={{
+                style: {
+                  paddingRight: 1,
+                },
+              }}
+            />
+            <Select
+              label="Duration"
+              placeholder="Pick value"
+              data={TIME_OPTIONS}
+              key={form.key("duration")}
+              {...form.getInputProps("duration")}
+              comboboxProps={{ withinPortal: false }}
+            />
+          </Flex>
+        </Box>
+        <Footer />
+      </form>
     </Flex>
   );
 };
