@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { getFutureDateTime, getPastDateTime } from "../util/dateTime";
 
 export enum TimeOption {
   ThirtySeconds = "± 30 seconds",
@@ -17,32 +18,6 @@ export const TIME_OPTIONS = [
   TimeOption.OneHour,
   TimeOption.OneDay,
 ];
-
-const getPastDateTime = (
-  date: string | null,
-  time: string,
-  amount: number,
-  unit: dayjs.ManipulateType
-) => {
-  const d = dayjs(`${date} ${time}`).subtract(amount, unit);
-  return {
-    date: d.format("YYYY-MM-DD"),
-    time: d.format("HH:mm:ss"),
-  };
-};
-
-const getFutureDateTime = (
-  date: string | null,
-  time: string,
-  amount: number,
-  unit: dayjs.ManipulateType
-) => {
-  const d = dayjs(`${date} ${time}`).add(amount, unit);
-  return {
-    date: d.format("YYYY-MM-DD"),
-    time: d.format("HH:mm:ss"),
-  };
-};
 
 export const getStartEndDateTime = (date: string | null, time: string, timeOption: TimeOption) => {
   switch (timeOption) {
