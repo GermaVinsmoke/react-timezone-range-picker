@@ -46,7 +46,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               key={form.key("startDate")}
               {...form.getInputProps("startDate")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="DD/MM/YYYY"
+              valueFormat="YYYY/MM/DD"
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput
@@ -72,7 +72,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               key={form.key("endDate")}
               {...form.getInputProps("endDate")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="DD/MM/YYYY"
+              valueFormat="YYYY/MM/DD"
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput
