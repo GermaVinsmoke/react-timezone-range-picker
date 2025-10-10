@@ -1,11 +1,12 @@
-import { Flex, Menu, Popover, Text } from "@mantine/core";
+import { Flex, Popover } from "@mantine/core";
 import { Button } from "@mantine/core";
 import { TimezonePanel } from "../TimezonePanel";
 import { Sidebar } from "../Sidebar";
 import { AroundTimePanel } from "../AroundTimePanel";
 import { StartEndTimePanel } from "../StartEndTimePanel";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { TimezoneData, TzRange } from "../interfaces";
+import { FC, useMemo, useState } from "react";
+import { TzRange } from "../interfaces";
+import { getPopoverButtonText } from "../util/dateTime";
 
 export enum Panel {
   START_END_TIME = "Start and end times",
@@ -29,10 +30,15 @@ export const TimezoneRangePicker: FC<TzRange> = (tzRange) => {
     }
   };
 
+  const getButtonText = useMemo(
+    () => getPopoverButtonText(tzRange),
+    [tzRange.startDate, tzRange.startTime, tzRange.endDate, tzRange.endTime, tzRange.timezone]
+  );
+
   return (
     <Popover position="bottom" shadow="md">
       <Popover.Target>
-        <Button>Toggle popover</Button>
+        <Button>{getButtonText}</Button>
       </Popover.Target>
       <Popover.Dropdown style={{ width: 700, height: 400, padding: 0 }} py={8}>
         <Flex style={{ height: "100%" }}>
