@@ -64,7 +64,7 @@ const DEFAULT_RANGE = {
 };
 
 function App() {
-  const [range, setRange] = useState < TzRange > DEFAULT_RANGE;
+  const [range, setRange] = useState<TzRange>(DEFAULT_RANGE);
 
   const handleTimeRangeApply = ({
     startDate,
