@@ -6,7 +6,8 @@
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "dev:ui": "pnpm -C packages/ui dev",
-    "dev:play": "pnpm -C apps/playground dev"
+    "dev:play": "pnpm -C apps/playground dev",
+    "dev:ui:pack": "cd packages/ui && npm pack --json"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.44.0",
