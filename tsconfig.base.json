@@ -14,7 +14,7 @@
     "types": ["node", "vitest/globals", "vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@react-timezone-range-picker/ui": ["packages/ui/src"]
+      "react-timezone-range-picker": ["packages/ui/src"]
     }
   }
 }

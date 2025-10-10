@@ -2,7 +2,7 @@ import {
   TimezoneRangePicker,
   TimezoneData,
   OnApplyParams,
-} from "@react-timezone-range-picker/ui";
+} from "react-timezone-range-picker";
 import { Box, Button, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
 import dayjs from "dayjs";
