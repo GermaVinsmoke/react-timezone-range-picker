@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@react-timezone-range-picker/ui": path.resolve(
+      "react-timezone-range-picker": path.resolve(
         __dirname,
         "../../packages/ui/src"
       ),

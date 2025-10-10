@@ -38,9 +38,6 @@ importers:
       '@mantine/hooks':
         specifier: ^8.3.1
         version: 8.3.1(react@19.1.1)
-      '@react-timezone-range-picker/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       add:
         specifier: ^2.0.6
         version: 2.0.6
@@ -53,6 +50,9 @@ importers:
       react-dom:
         specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
+      react-timezone-range-picker:
+        specifier: workspace:*
+        version: link:../../packages/ui
     devDependencies:
       '@types/node':
         specifier: ^24.5.0
