@@ -42,7 +42,7 @@ export const TimezoneRangePicker: FC<TzRange> = (tzRange) => {
       </Popover.Target>
       <Popover.Dropdown style={{ width: 700, height: 400, padding: 0 }} py={8}>
         <Flex style={{ height: "100%" }}>
-          <Sidebar setSelectedPanel={setSelectedPanel} />
+          <Sidebar tzRange={tzRange} setSelectedPanel={setSelectedPanel} />
           {renderPanel()}
         </Flex>
       </Popover.Dropdown>
