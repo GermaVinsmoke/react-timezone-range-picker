@@ -1,20 +1,32 @@
-import { ITimeOptions, TIME_OPTIONS } from "./timeOptions";
+import { getTimeOptions, ITimeOptions } from "./timeOptions";
 import { Box, Flex, Input, Text } from "@mantine/core";
 import styled from "./index.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "react-use";
 import clsx from "clsx";
 import { useAppTheme } from "../hooks/useAppTheme";
+import { TzRange } from "../interfaces";
 
-export const RelativeTimePanel = () => {
-  const [filteredOptions, setFilteredOptions] = useState<ITimeOptions[]>(TIME_OPTIONS);
+interface IRelativeTimePanel {
+  tzRange: TzRange;
+}
+
+export const RelativeTimePanel = ({ tzRange }: IRelativeTimePanel) => {
+  const [filteredOptions, setFilteredOptions] = useState<ITimeOptions[]>([]);
   const [searchText, setSearchText] = useState("");
   const { colorScheme } = useAppTheme();
+
+  useEffect(() => {
+    if (tzRange.timezone.name !== null) {
+      const timeOptions = getTimeOptions(tzRange.timezone.name);
+      setFilteredOptions(timeOptions);
+    }
+  }, [tzRange.timezone]);
 
   useDebounce(
     () => {
       if (searchText === "") {
-        setFilteredOptions(TIME_OPTIONS);
+        setFilteredOptions(getTimeOptions(tzRange.timezone.name!));
         return;
       }
 
@@ -26,6 +38,19 @@ export const RelativeTimePanel = () => {
     250,
     [searchText]
   );
+
+  const handleRowClick = (option: ITimeOptions) => {
+    const [startDate, startTime] = option.startTime.split("T");
+    const [endDate, endTime] = option.endTime.split("T");
+
+    tzRange.onApply({
+      startDate,
+      startTime: startTime.slice(0, 8),
+      endDate,
+      endTime: endTime.slice(0, 8),
+      timezone: tzRange.timezone,
+    });
+  };
 
   return (
     <>
@@ -50,6 +75,7 @@ export const RelativeTimePanel = () => {
             py={4}
             px={12}
             mb={op.lineBreak ? 8 : 0}
+            onClick={() => handleRowClick(op)}
           >
             <Text size="sm">{op.label}</Text>
             <Text size="xs" c="#5f6368">
