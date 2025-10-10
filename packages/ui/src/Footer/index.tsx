@@ -7,7 +7,7 @@ interface IFooter {
   handleCancelClick?: () => void;
 }
 
-export const Footer: FC<IFooter> = ({ handleApplyClick, handleCancelClick }) => {
+export const Footer: FC<IFooter> = ({ handleCancelClick }) => {
   const { theme } = useAppTheme();
 
   return (
@@ -16,7 +16,7 @@ export const Footer: FC<IFooter> = ({ handleApplyClick, handleCancelClick }) => 
         <Button size="xs" variant="subtle" color={theme.primaryColor} onClick={handleCancelClick}>
           Cancel
         </Button>
-        <Button size="xs" color={theme.primaryColor} onClick={handleApplyClick}>
+        <Button type="submit" size="xs" color={theme.primaryColor}>
           Apply
         </Button>
       </Flex>
