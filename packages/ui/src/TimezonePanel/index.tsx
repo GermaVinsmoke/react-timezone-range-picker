@@ -1,13 +1,14 @@
-import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
+import { FC, FormEvent, useEffect, useMemo, useState } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { useDebounce } from "react-use";
 import { TimezoneList } from "./components/TimezoneList";
 import { TimezoneSearch } from "./components/TimezoneSearch";
 import { getTimezones } from "./util/getTimezones";
 import styled from "./index.module.css";
+import commonStyled from "../styles/index.module.css";
 import { getBrowserTimezone } from "./util/getBrowserTimezone";
 import { Footer } from "../Footer";
-import { TimezoneData } from "../interfaces";
+import { TimezoneData, TzRange } from "../interfaces";
 import dayjs from "dayjs";
 
 // TODO - Should pass timezone value from playground app as our selection value
@@ -22,12 +23,11 @@ interface ITimezoneDataInternal {
 }
 
 interface ITimezonePanel {
-  timezone: TimezoneData;
-  setTimezone: Dispatch<SetStateAction<TimezoneData>>;
+  tzRange: TzRange;
 }
 
-const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
-  const [selectedTimezone, setSelectedTimezone] = useState<TimezoneData>(timezone);
+const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
+  const [selectedTimezone, setSelectedTimezone] = useState<TimezoneData | null>(tzRange.timezone);
   const [filteredTimezones, setFilteredTimezones] = useState<ITimezoneDataInternal[]>([]);
   const [searchText, setSearchText] = useState("");
 
@@ -64,12 +64,28 @@ const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
     setSelectedTimezone(selectedTimezone);
   };
 
-  const handleApply = () => {
-    setTimezone(selectedTimezone);
+  const handleApply = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    tzRange.onApply({
+      startDate: tzRange.startDate,
+      startTime: tzRange.startTime,
+      endDate: tzRange.endDate,
+      endTime: tzRange.endTime,
+      timezone: selectedTimezone || {
+        name: null,
+        longName: null,
+        utcOffset: null,
+      },
+    });
+  };
+
+  const getCurrentTimeInTz = (tzName: string | null) => {
+    if (!tzName) return "";
+    return dayjs().tz(tzName).format("h:mm A");
   };
 
   return (
-    <Flex direction="column" flex={2} justify={"space-between"} style={{ height: "100%" }}>
+    <form className={commonStyled["form-container"]} onSubmit={handleApply}>
       <Flex direction="column" style={{ height: "calc(100% - 40px)" }}>
         <Box style={{ width: "95%" }} mx="auto">
           <TimezoneSearch searchText={searchText} setSearchText={setSearchText} />
@@ -81,10 +97,10 @@ const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
           <Flex direction="column">
             <TimezoneList
               isBrowserTimezone
-              name={timezone.name}
-              longName={timezone.longName}
-              currentTime={dayjs().tz(timezone.name).format("h:mm A")}
-              utcOffset={timezone.utcOffset}
+              name={tzRange.timezone?.name}
+              longName={tzRange.timezone?.longName}
+              currentTime={getCurrentTimeInTz(tzRange.timezone?.name)}
+              utcOffset={tzRange.timezone?.utcOffset}
               selectedTimezone={selectedTimezone}
             />
           </Flex>
@@ -107,9 +123,9 @@ const TimezonePanel: FC<ITimezonePanel> = ({ timezone, setTimezone }) => {
         </Box>
       </Flex>
       <Box px={12}>
-        <Footer handleApplyClick={handleApply} />
+        <Footer />
       </Box>
-    </Flex>
+    </form>
   );
 };
 
