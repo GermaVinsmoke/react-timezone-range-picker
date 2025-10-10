@@ -14,7 +14,7 @@
 - 🌍 **Timezone-aware** display and conversion (via `dayjs`)
 - 🎨 **Mantine 8** components for accessibility and theming
 - ⚡️ **TypeScript** support with generated definitions
-- 🪶 **Lightweight** build via `tsup`, tree-shakeable ESM + CJS outputs
+- 🪶 **Lightweight** build via `vite`, tree-shakeable ESM + CJS outputs
 
 ---
 
