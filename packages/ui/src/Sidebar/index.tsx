@@ -9,15 +9,17 @@ import styled from "./index.module.css";
 import { Dispatch, FC, SetStateAction } from "react";
 import { Panel } from "../TimezoneRangePicker";
 import { RelativeTimePanel } from "../RelativeTimePanel";
+import { TzRange } from "../interfaces";
 
 interface ISidebar {
+  tzRange: TzRange;
   setSelectedPanel: Dispatch<SetStateAction<Panel>>;
 }
 
-export const Sidebar: FC<ISidebar> = ({ setSelectedPanel }) => {
+export const Sidebar: FC<ISidebar> = ({ setSelectedPanel, tzRange }) => {
   return (
     <Box className={styled["sidebar-container"]} flex={1}>
-      <RelativeTimePanel />
+      <RelativeTimePanel tzRange={tzRange} />
       <Flex direction="column" rowGap={16} py={8} style={{ borderTop: "1px solid #ddd" }}>
         <Flex
           className={styled["sidebar-row"]}
