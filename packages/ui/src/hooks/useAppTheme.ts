@@ -4,5 +4,5 @@ export const useAppTheme = () => {
   const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
 
-  return { colorScheme, theme, appTheme: theme.other.appTheme[colorScheme] };
+  return { colorScheme, theme };
 };
