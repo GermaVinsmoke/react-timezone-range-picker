@@ -6,11 +6,11 @@ import { useAppTheme } from "../../../hooks/useAppTheme";
 import { TimezoneData } from "packages/ui/src/interfaces";
 
 interface ITimezoneList {
-  name: string;
-  longName: string;
+  name: string | null;
+  longName: string | null;
   currentTime: string;
-  utcOffset: string;
-  selectedTimezone: TimezoneData;
+  utcOffset: string | null;
+  selectedTimezone: TimezoneData | null;
   isBrowserTimezone?: boolean;
   handleTimezoneMouseClick?: (selectedTimezone: TimezoneData) => void;
 }
@@ -46,7 +46,7 @@ export const TimezoneList: FC<ITimezoneList> = ({
           : colorScheme === "dark"
           ? styled["row-dark"]
           : styled["row-light"],
-        selectedTimezone.name === name
+        selectedTimezone?.name === name
           ? colorScheme === "dark"
             ? styled["row-selected-dark"]
             : styled["row-selected-light"]
