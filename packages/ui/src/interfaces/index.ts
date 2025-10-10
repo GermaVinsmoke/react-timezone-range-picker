@@ -1,5 +1,25 @@
 export interface TimezoneData {
-  name: string;
-  longName: string;
-  utcOffset: string;
+  name: string | null;
+  longName: string | null;
+  utcOffset: string | null;
+}
+
+export interface OnApplyParams {
+  startDate: string | null;
+  startTime: string | null;
+  endDate: string | null;
+  endTime: string | null;
+  timezone: TimezoneData;
+}
+
+export interface TzRange {
+  startDate: string | null;
+  startTime: string | null;
+
+  endDate: string | null;
+  endTime: string | null;
+
+  timezone: TimezoneData;
+
+  onApply: ({ startDate, startTime, endDate, endTime, timezone }: OnApplyParams) => void;
 }
