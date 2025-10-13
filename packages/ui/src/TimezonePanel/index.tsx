@@ -6,13 +6,10 @@ import { TimezoneSearch } from "./components/TimezoneSearch";
 import { getTimezones } from "./util/getTimezones";
 import styled from "./index.module.css";
 import commonStyled from "../styles/index.module.css";
-import { getBrowserTimezone } from "./util/getBrowserTimezone";
 import { Footer } from "../Footer";
 import { TimezoneData, TzRange } from "../interfaces";
 import dayjs from "dayjs";
-
-// TODO - Should pass timezone value from playground app as our selection value
-// TODO - Should also have a way in which it shows selected/default timezone (by browser)
+import { renderIn, toUtcIso } from "../util/dateTime";
 
 interface ITimezoneDataInternal {
   name: string;
@@ -58,19 +55,34 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
     [searchText]
   );
 
-  const browserTimezone = useMemo(() => getBrowserTimezone(), []);
-
   const handleTimezoneMouseClick = (selectedTimezone: TimezoneData) => {
     setSelectedTimezone(selectedTimezone);
   };
 
   const handleApply = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (
+      !selectedTimezone?.name ||
+      !tzRange.timezone.name ||
+      !tzRange.startDate ||
+      !tzRange.startTime ||
+      !tzRange.endDate ||
+      !tzRange.endTime
+    )
+      return;
+
+    const startUtcIso = toUtcIso(tzRange.startDate, tzRange.startTime, tzRange.timezone.name);
+    const endUtcIso = toUtcIso(tzRange.endDate, tzRange.endTime, tzRange.timezone.name);
+
+    const tzStartDate = renderIn(startUtcIso, selectedTimezone.name);
+    const tzEndDate = renderIn(endUtcIso, selectedTimezone.name);
+
     tzRange.onApply({
-      startDate: tzRange.startDate,
-      startTime: tzRange.startTime,
-      endDate: tzRange.endDate,
-      endTime: tzRange.endTime,
+      startDate: tzStartDate.date,
+      startTime: tzStartDate.time,
+      endDate: tzEndDate.date,
+      endTime: tzEndDate.time,
       timezone: selectedTimezone || {
         name: null,
         longName: null,
