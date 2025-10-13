@@ -54,7 +54,7 @@ export const toUtcIso = (dateStr: string, timeStr: string, sourceZone: string) =
     .toISOString();
 };
 
-export const renderIn = (utcIso: string, zone: string) => {
+export const toTz = (utcIso: string, zone: string) => {
   const d = dayjs.utc(utcIso).tz(zone);
   return { date: d.format(DATEFORMAT), time: d.format(TIMEFORMAT) };
 };

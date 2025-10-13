@@ -9,7 +9,7 @@ import commonStyled from "../styles/index.module.css";
 import { Footer } from "../Footer";
 import { TimezoneData, TzRange } from "../interfaces";
 import dayjs from "dayjs";
-import { renderIn, toUtcIso } from "../util/dateTime";
+import { toTz, toUtcIso } from "../util/dateTime";
 
 interface ITimezoneDataInternal {
   name: string;
@@ -75,8 +75,8 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
     const startUtcIso = toUtcIso(tzRange.startDate, tzRange.startTime, tzRange.timezone.name);
     const endUtcIso = toUtcIso(tzRange.endDate, tzRange.endTime, tzRange.timezone.name);
 
-    const tzStartDate = renderIn(startUtcIso, selectedTimezone.name);
-    const tzEndDate = renderIn(endUtcIso, selectedTimezone.name);
+    const tzStartDate = toTz(startUtcIso, selectedTimezone.name);
+    const tzEndDate = toTz(endUtcIso, selectedTimezone.name);
 
     tzRange.onApply({
       startDate: tzStartDate.date,
