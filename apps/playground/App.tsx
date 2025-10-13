@@ -1,7 +1,7 @@
 import {
   TimezoneRangePicker,
-  TimezoneData,
-  OnApplyParams,
+  type TimezoneData,
+  type OnApplyParams,
 } from "react-timezone-range-picker";
 import { Box, Button, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
@@ -14,10 +14,10 @@ dayjs.extend(timezone);
 
 const getCurrentTime = () => dayjs().format("HH:mm:ss");
 
-const getCurrentDate = () => dayjs().format("YYYY-MM-DD");
+const getCurrentDate = () => dayjs().format("YYYY/MM/DD");
 
 const getCurrentPlusDate = (amount: number) =>
-  dayjs().add(amount, "day").format("YYYY-MM-DD");
+  dayjs().add(amount, "day").format("YYYY/MM/DD");
 
 const DEFAULT_TIMEZONE = {
   name: "Asia/Tokyo",
@@ -81,7 +81,7 @@ function App() {
       <Text>
         Current Time:{" "}
         {range.timezone.name &&
-          dayjs().tz(range.timezone.name).format("YYYY-MM-DD HH:mm:ss")}
+          dayjs().tz(range.timezone.name).format("YYYY/MM/DD HH:mm:ss")}
       </Text>
       <Text>UTC Offset: {range.timezone.utcOffset}</Text>
       <Text>
