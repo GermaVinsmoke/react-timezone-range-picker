@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Box, Flex, Select, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import { DATEFORMAT, getCurrentDate, getCurrentTime } from "../util/dateTime";
+import { DATEFORMAT, getCurrentDate, getCurrentTime, toTz, toUtcIso } from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
@@ -28,9 +28,14 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
   });
 
   const onSubmit = (values: typeof form.values) => {
+    if (!tzRange.timezone.name) return;
+
+    const dateUtc = toUtcIso(values.date, values.time, tzRange.timezone.name);
+    const dateInTz = toTz(dateUtc, tzRange.timezone.name);
+
     const { startDate, startTime, endDate, endTime } = getStartEndDateTime(
-      values.date,
-      values.time,
+      dateInTz.date,
+      dateInTz.time,
       values.duration
     );
 
