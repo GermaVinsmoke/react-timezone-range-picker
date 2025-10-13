@@ -2,7 +2,14 @@ import { FC } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import { DATEFORMAT, getCurrentDate, getCurrentPlusDate, getCurrentTime } from "../util/dateTime";
+import {
+  DATEFORMAT,
+  getCurrentDate,
+  getCurrentPlusDate,
+  getCurrentTime,
+  toTz,
+  toUtcIso,
+} from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { useForm } from "@mantine/form";
@@ -41,11 +48,19 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
   });
 
   const onSubmit = (values: typeof form.values) => {
+    if (!tzRange.timezone.name) return;
+
+    const startDateUtc = toUtcIso(values.startDate, values.startTime, tzRange.timezone.name);
+    const endDateUtc = toUtcIso(values.endDate, values.endTime, tzRange.timezone.name);
+
+    const startDateInTz = toTz(startDateUtc, tzRange.timezone.name);
+    const endDateInTz = toTz(endDateUtc, tzRange.timezone.name);
+
     tzRange.onApply({
-      startDate: values.startDate,
-      startTime: values.startTime,
-      endDate: values.endDate,
-      endTime: values.endTime,
+      startDate: startDateInTz.date,
+      startTime: startDateInTz.time,
+      endDate: endDateInTz.date,
+      endTime: endDateInTz.time,
       timezone: tzRange.timezone,
     });
   };
