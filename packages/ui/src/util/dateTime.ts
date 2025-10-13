@@ -1,12 +1,14 @@
 import dayjs from "dayjs";
 import { TzRange } from "../interfaces";
 
-export const getCurrentTime = () => dayjs().format("HH:mm:ss");
+export const DATEFORMAT = "YYYY/MM/DD";
+export const TIMEFORMAT = "HH:mm:ss";
 
-export const getCurrentDate = () => dayjs().format("YYYY-MM-DD");
+export const getCurrentTime = () => dayjs().format(TIMEFORMAT);
 
-export const getCurrentPlusDate = (amount: number) =>
-  dayjs().add(amount, "day").format("YYYY-MM-DD");
+export const getCurrentDate = () => dayjs().format(DATEFORMAT);
+
+export const getCurrentPlusDate = (amount: number) => dayjs().add(amount, "day").format(DATEFORMAT);
 
 export const getShortTimezoneName = (tz: string | null) => {
   if (!tz) return tz;
@@ -14,9 +16,9 @@ export const getShortTimezoneName = (tz: string | null) => {
 };
 
 export const getPopoverButtonText = (tzRange: TzRange) => {
-  return `${dayjs(tzRange.startDate).format("YYYY/MM/DD")} ${tzRange.startTime} - ${dayjs(
+  return `${dayjs(tzRange.startDate).format(DATEFORMAT)} ${tzRange.startTime} - ${dayjs(
     tzRange.endDate
-  ).format("YYYY/MM/DD")} ${tzRange.endTime} (${getShortTimezoneName(tzRange.timezone.name)})`;
+  ).format(DATEFORMAT)} ${tzRange.endTime} (${getShortTimezoneName(tzRange.timezone.name)})`;
 };
 
 export const getPastDateTime = (
@@ -27,8 +29,8 @@ export const getPastDateTime = (
 ) => {
   const d = dayjs(`${date} ${time}`).subtract(amount, unit);
   return {
-    date: d.format("YYYY-MM-DD"),
-    time: d.format("HH:mm:ss"),
+    date: d.format(DATEFORMAT),
+    time: d.format(TIMEFORMAT),
   };
 };
 
@@ -40,7 +42,19 @@ export const getFutureDateTime = (
 ) => {
   const d = dayjs(`${date} ${time}`).add(amount, unit);
   return {
-    date: d.format("YYYY-MM-DD"),
-    time: d.format("HH:mm:ss"),
+    date: d.format(DATEFORMAT),
+    time: d.format(TIMEFORMAT),
   };
+};
+
+export const toUtcIso = (dateStr: string, timeStr: string, sourceZone: string) => {
+  return dayjs
+    .tz(`${dateStr} ${timeStr}`, `${DATEFORMAT} ${TIMEFORMAT}`, sourceZone)
+    .utc()
+    .toISOString();
+};
+
+export const renderIn = (utcIso: string, zone: string) => {
+  const d = dayjs.utc(utcIso).tz(zone);
+  return { date: d.format(DATEFORMAT), time: d.format(TIMEFORMAT) };
 };

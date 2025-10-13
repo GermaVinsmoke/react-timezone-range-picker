@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Box, Flex, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import { getCurrentDate, getCurrentPlusDate, getCurrentTime } from "../util/dateTime";
+import { DATEFORMAT, getCurrentDate, getCurrentPlusDate, getCurrentTime } from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { useForm } from "@mantine/form";
@@ -61,7 +61,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               key={form.key("startDate")}
               {...form.getInputProps("startDate")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="YYYY/MM/DD"
+              valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput
@@ -87,7 +87,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               key={form.key("endDate")}
               {...form.getInputProps("endDate")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="YYYY/MM/DD"
+              valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput

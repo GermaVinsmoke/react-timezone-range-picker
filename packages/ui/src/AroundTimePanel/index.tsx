@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Box, Flex, Select, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import { getCurrentDate, getCurrentTime } from "../util/dateTime";
+import { DATEFORMAT, getCurrentDate, getCurrentTime } from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
@@ -55,14 +55,13 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
               key={form.key("date")}
               {...form.getInputProps("date")}
               popoverProps={{ withinPortal: false }}
-              valueFormat="YYYY/MM/DD"
+              valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />
             <TimeInput
               label="Pick time"
               placeholder="Pick time"
               withSeconds
-              defaultValue={getCurrentTime()}
               key={form.key("time")}
               {...form.getInputProps("time")}
               leftSection={<IconClock stroke={1.5} />}
