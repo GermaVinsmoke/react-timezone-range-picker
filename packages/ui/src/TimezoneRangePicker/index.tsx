@@ -7,6 +7,7 @@ import { StartEndTimePanel } from "../StartEndTimePanel";
 import { FC, useMemo, useState } from "react";
 import { TzRange } from "../interfaces";
 import { getPopoverButtonText } from "../util/dateTime";
+import { PopoverProvider, usePopoverContext } from "../Provider/PopoverProvider";
 
 export enum Panel {
   START_END_TIME = "Start and end times",
@@ -14,8 +15,9 @@ export enum Panel {
   TIMEZONE = "Time zone",
 }
 
-export const TimezoneRangePicker: FC<TzRange> = (tzRange) => {
+const TimezoneRangePickerView: FC<TzRange> = (tzRange) => {
   const [selectedPanel, setSelectedPanel] = useState<Panel>(Panel.START_END_TIME);
+  const { popoverOpened, setPopoverOpened } = usePopoverContext();
 
   const renderPanel = () => {
     switch (selectedPanel) {
@@ -30,15 +32,19 @@ export const TimezoneRangePicker: FC<TzRange> = (tzRange) => {
     }
   };
 
+  const handleButtonClick = () => {
+    setPopoverOpened((p) => !p);
+  };
+
   const getButtonText = useMemo(
     () => getPopoverButtonText(tzRange),
     [tzRange.startDate, tzRange.startTime, tzRange.endDate, tzRange.endTime, tzRange.timezone]
   );
 
   return (
-    <Popover position="bottom" shadow="md">
+    <Popover position="bottom" shadow="md" opened={popoverOpened} onChange={setPopoverOpened}>
       <Popover.Target>
-        <Button>{getButtonText}</Button>
+        <Button onClick={handleButtonClick}>{getButtonText}</Button>
       </Popover.Target>
       <Popover.Dropdown style={{ width: 700, height: 400, padding: 0 }} py={8}>
         <Flex style={{ height: "100%" }}>
@@ -49,3 +55,13 @@ export const TimezoneRangePicker: FC<TzRange> = (tzRange) => {
     </Popover>
   );
 };
+
+const TimezoneRangePickerWrapper = (props: TzRange) => {
+  return (
+    <PopoverProvider>
+      <TimezoneRangePickerView {...props} />
+    </PopoverProvider>
+  );
+};
+
+export { TimezoneRangePickerWrapper as TimezoneRangePicker };
