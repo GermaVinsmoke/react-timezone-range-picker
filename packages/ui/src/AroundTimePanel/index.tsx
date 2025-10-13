@@ -20,6 +20,11 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
       time: getCurrentTime(),
       duration: TimeOption.OneDay,
     },
+    validate: {
+      date: (value) => (value ? null : "Date is required"),
+      time: (value) => (value ? null : "Time is required"),
+      duration: (value) => (value ? null : "Duration is required"),
+    },
   });
 
   const onSubmit = (values: typeof form.values) => {

@@ -7,6 +7,7 @@ import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { useForm } from "@mantine/form";
 import styled from "../styles/index.module.css";
+import dayjs from "dayjs";
 
 interface IStartEndTimePanel {
   tzRange: TzRange;
@@ -20,6 +21,22 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
       startTime: getCurrentTime(),
       endDate: getCurrentPlusDate(30),
       endTime: getCurrentTime(),
+    },
+    validate: {
+      startDate: (value) => (value ? null : "Start date is required"),
+      startTime: (value) => (value ? null : "Start time is required"),
+      endDate: (value, values) => {
+        if (!value) return "End date is required";
+        const start = dayjs(`${values.startDate} ${values.startTime}`);
+        const end = dayjs(`${value} ${values.endTime}`);
+        return end.isAfter(start) || end.isSame(start) ? null : "End time must be after start time";
+      },
+      endTime: (value, values) => {
+        if (!value) return "End time is required";
+        const start = dayjs(`${values.startDate} ${values.startTime}`);
+        const end = dayjs(`${values.endDate} ${value}`);
+        return end.isAfter(start) || end.isSame(start) ? null : "End time must be after start time";
+      },
     },
   });
 
