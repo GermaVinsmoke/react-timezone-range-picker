@@ -38,9 +38,7 @@ You must install these in your project:
 - `react-dom` (>=18)
 - `@mantine/core` (>=8.3.1)
 - `@mantine/dates` (>=8.3.1)
-- `@mantine/form` (>=8.3.4)
 - `@mantine/hooks` (>=8.3.1)
-- `dayjs` (>=1.11.18)
 
 ---
 
@@ -49,9 +47,11 @@ You must install these in your project:
 ```tsx
 import {
   TimezoneRangePicker,
-  OnApplyParams,
-  TimezoneData,
+  type OnApplyParams,
+  type TimezoneData,
 } from "react-timezone-range-picker";
+// Should import the css to make sure the application works
+import "react-timezone-range-picker/style.css";
 
 const DEFAULT_TIMEZONE = {
   name: "Asia/Tokyo",
