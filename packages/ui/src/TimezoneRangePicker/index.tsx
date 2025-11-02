@@ -44,7 +44,9 @@ const TimezoneRangePickerView: FC<TzRange> = (tzRange) => {
   return (
     <Popover position="bottom" shadow="md" opened={popoverOpened} onChange={setPopoverOpened}>
       <Popover.Target>
-        <Button onClick={handleButtonClick}>{getButtonText}</Button>
+        <Button onClick={handleButtonClick} style={tzRange.buttonStyle || {}}>
+          {getButtonText}
+        </Button>
       </Popover.Target>
       <Popover.Dropdown style={{ width: 700, height: 400, padding: 0 }} py={8}>
         <Flex style={{ height: "100%" }}>

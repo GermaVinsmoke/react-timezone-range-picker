@@ -1,3 +1,5 @@
+import { MantineStyleProp } from "@mantine/core";
+
 export interface TimezoneData {
   name: string | null;
   longName: string | null;
@@ -22,4 +24,6 @@ export interface TzRange {
   timezone: TimezoneData;
 
   onApply: ({ startDate, startTime, endDate, endTime, timezone }: OnApplyParams) => void;
+
+  buttonStyle?: MantineStyleProp;
 }
