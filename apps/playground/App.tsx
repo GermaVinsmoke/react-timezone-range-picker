@@ -92,7 +92,11 @@ function App() {
       </Text>
       <br />
       <Flex columnGap={8}>
-        <TimezoneRangePicker {...range} onApply={handleTimeRangeApply} />
+        <TimezoneRangePicker
+          {...range}
+          onApply={handleTimeRangeApply}
+          buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
+        />
         <Button onClick={toggle}>Toggle Theme</Button>
       </Flex>
     </Box>
