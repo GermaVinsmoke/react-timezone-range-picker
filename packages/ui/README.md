@@ -67,6 +67,16 @@ const DEFAULT_RANGE = {
   timezone: DEFAULT_TIMEZONE,
 };
 
+type TzRange = {
+  startDate: string | null;
+  startTime: string | null;
+
+  endDate: string | null;
+  endTime: string | null;
+
+  timezone: TimezoneData;
+};
+
 function App() {
   const [range, setRange] = useState<TzRange>(DEFAULT_RANGE);
 
@@ -80,6 +90,12 @@ function App() {
     setRange({ startDate, startTime, endDate, endTime, timezone });
   };
 
-  return <TimezoneRangePicker {...range} onApply={handleTimeRangeApply} />;
+  return (
+    <TimezoneRangePicker
+      {...range}
+      onApply={handleTimeRangeApply}
+      buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
+    />
+  );
 }
 ```
