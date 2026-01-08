@@ -16,8 +16,8 @@ interface IAroundTimePanel {
 const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
   const form = useForm({
     initialValues: {
-      date: getCurrentDate(),
-      time: getCurrentTime(),
+      date: tzRange.startDate ?? getCurrentDate(tzRange),
+      time: tzRange.startTime ?? getCurrentTime(tzRange),
       duration: TimeOption.OneDay,
     },
     validate: {
