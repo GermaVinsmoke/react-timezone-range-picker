@@ -24,10 +24,10 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      startDate: getCurrentDate(),
-      startTime: getCurrentTime(),
-      endDate: getCurrentPlusDate(30),
-      endTime: getCurrentTime(),
+      startDate: tzRange.startDate ?? getCurrentDate(tzRange),
+      startTime: tzRange.startTime ?? getCurrentTime(tzRange),
+      endDate: tzRange.endDate ?? getCurrentPlusDate(30),
+      endTime: tzRange.endTime ?? getCurrentTime(tzRange),
     },
     validate: {
       startDate: (value) => (value ? null : "Start date is required"),
@@ -81,7 +81,6 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
             />
             <TimeInput
               withSeconds
-              defaultValue={getCurrentTime()}
               key={form.key("startTime")}
               {...form.getInputProps("startTime")}
               leftSection={<IconClock stroke={1.5} />}
@@ -107,7 +106,6 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
             />
             <TimeInput
               withSeconds
-              defaultValue={getCurrentTime()}
               key={form.key("endTime")}
               {...form.getInputProps("endTime")}
               leftSection={<IconClock stroke={1.5} />}
