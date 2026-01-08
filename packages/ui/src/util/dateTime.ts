@@ -4,9 +4,15 @@ import { TzRange } from "../interfaces";
 export const DATEFORMAT = "YYYY/MM/DD";
 export const TIMEFORMAT = "HH:mm:ss";
 
-export const getCurrentTime = () => dayjs().format(TIMEFORMAT);
+export const getCurrentTime = (tzRange: TzRange) => {
+  if (!tzRange.timezone.name) return dayjs().format(TIMEFORMAT);
+  return dayjs().tz(tzRange.timezone.name).format(TIMEFORMAT);
+};
 
-export const getCurrentDate = () => dayjs().format(DATEFORMAT);
+export const getCurrentDate = (tzRange: TzRange) => {
+  if (!tzRange.timezone.name) return dayjs().format(DATEFORMAT);
+  return dayjs().tz(tzRange.timezone.name).format(DATEFORMAT);
+};
 
 export const getCurrentPlusDate = (amount: number) => dayjs().add(amount, "day").format(DATEFORMAT);
 
