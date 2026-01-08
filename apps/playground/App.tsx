@@ -13,11 +13,38 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const getCurrentTime = () => dayjs().format("HH:mm:ss");
+const getCurrentTimeInTz = (tzName: string) =>
+  dayjs().tz(tzName).format("HH:mm:ss");
 
 const getCurrentDate = () => dayjs().format("YYYY/MM/DD");
+const getCurrentDateInTz = (tzName: string) =>
+  dayjs().tz(tzName).format("YYYY/MM/DD");
 
 const getCurrentPlusDate = (amount: number) =>
   dayjs().add(amount, "day").format("YYYY/MM/DD");
+const getCurrentPlusDateInTz = (amount: number, tzName: string) =>
+  dayjs().tz(tzName).add(amount, "day").format("YYYY/MM/DD");
+
+const getTimezoneOffest = (tzName: string) => dayjs().tz(tzName).format("Z");
+
+const getTimezoneLongName = (tzName: string) => {
+  return (
+    Intl.DateTimeFormat("en", {
+      timeZone: tzName,
+      timeZoneName: "long",
+    })
+      .formatToParts(new Date())
+      .find((part) => part.type === "timeZoneName")?.value || tzName
+  );
+};
+
+export const getBrowserTimezone = () => {
+  const name = dayjs.tz.guess();
+  const offset = getTimezoneOffest(name);
+  const longName = getTimezoneLongName(name);
+
+  return { name, longName, offset };
+};
 
 const DEFAULT_TIMEZONE = {
   name: "Asia/Tokyo",
@@ -25,12 +52,24 @@ const DEFAULT_TIMEZONE = {
   utcOffset: "+09:00",
 };
 
+const getDefaultTzRange = () => {
+  const timezone = getBrowserTimezone();
+
+  return {
+    startDate: getCurrentDateInTz(timezone.name),
+    startTime: getCurrentTimeInTz(timezone.name),
+    endDate: getCurrentPlusDateInTz(30, timezone.name),
+    endTime: getCurrentTimeInTz(timezone.name),
+    timezone,
+  };
+};
+
 const DEFAULT_RANGE = {
   startDate: getCurrentDate(),
   startTime: getCurrentTime(),
   endDate: getCurrentPlusDate(30),
   endTime: getCurrentTime(),
-  timezone: DEFAULT_TIMEZONE,
+  timezone: getBrowserTimezone(),
 };
 
 const EMPTY_RANGE = {
@@ -56,7 +95,7 @@ type TzRange = {
 };
 
 function App() {
-  const [range, setRange] = useState<TzRange>(DEFAULT_RANGE);
+  const [range, setRange] = useState<TzRange>(getDefaultTzRange());
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -95,7 +134,7 @@ function App() {
         <TimezoneRangePicker
           {...range}
           onApply={handleTimeRangeApply}
-          buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
+          // buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
         />
         <Button onClick={toggle}>Toggle Theme</Button>
       </Flex>
