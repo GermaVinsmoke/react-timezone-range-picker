@@ -7,8 +7,13 @@ import { parseOffset } from "./parseOffest";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const normalizeTimezone = (timezone: string) => {
+  if (["UTC", "Etc/UTC", "GMT", "Etc/GMT"].includes(timezone)) return "UTC";
+  return timezone;
+};
+
 export const getBrowserTimezone = () => {
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const tz = normalizeTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const offset = dayjs().tz(tz).format("Z");
 
   return {
