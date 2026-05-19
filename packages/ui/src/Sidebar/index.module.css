@@ -1,5 +1,17 @@
 .sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  min-width: 220px;
+  overflow: hidden;
   border-right: 1px solid #ddd;
+}
+
+.sidebar-mobile-relative {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .sidebar-row {

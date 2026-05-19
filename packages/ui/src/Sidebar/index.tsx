@@ -14,9 +14,18 @@ import { TzRange } from "../interfaces";
 interface ISidebar {
   tzRange: TzRange;
   setSelectedPanel: Dispatch<SetStateAction<Panel>>;
+  mobileOnlyRelative?: boolean;
 }
 
-export const Sidebar: FC<ISidebar> = ({ setSelectedPanel, tzRange }) => {
+export const Sidebar: FC<ISidebar> = ({ setSelectedPanel, tzRange, mobileOnlyRelative = false }) => {
+  if (mobileOnlyRelative) {
+    return (
+      <Box className={styled["sidebar-mobile-relative"]}>
+        <RelativeTimePanel tzRange={tzRange} />
+      </Box>
+    );
+  }
+
   return (
     <Box className={styled["sidebar-container"]} flex={1}>
       <RelativeTimePanel tzRange={tzRange} />

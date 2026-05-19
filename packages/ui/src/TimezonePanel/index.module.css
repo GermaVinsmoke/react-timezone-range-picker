@@ -1,9 +1,23 @@
 .timezone-panel-container {
   height: 100%;
+  min-height: 0;
+}
+
+.search-container {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 95%;
+  margin: 0 auto;
+  padding-bottom: 8px;
+}
+
+.timezone-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .list-container {
-  overflow-y: auto;
-  height: inherit;
   margin-top: 0.5rem;
 }

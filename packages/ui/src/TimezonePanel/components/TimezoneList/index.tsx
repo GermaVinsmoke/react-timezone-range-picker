@@ -1,4 +1,5 @@
 import { Flex, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { FC } from "react";
 import clsx from "clsx";
 import styled from "./index.module.css";
@@ -25,6 +26,7 @@ export const TimezoneList: FC<ITimezoneList> = ({
   handleTimezoneMouseClick = undefined,
 }) => {
   const { colorScheme } = useAppTheme();
+  const isMobile = useMediaQuery("(max-width: 48em)");
 
   const onClick = () => {
     if (isBrowserTimezone) return;
@@ -54,13 +56,13 @@ export const TimezoneList: FC<ITimezoneList> = ({
       )}
       onClick={onClick}
     >
-      <Flex justify="space-between">
+      <Flex justify="space-between" gap={8} wrap={isMobile ? "wrap" : "nowrap"}>
         <Text size="sm">{name}</Text>
-        <Text size="sm">
-          {currentTime} • UTC{utcOffset}
-        </Text>
+        <Text size="sm">{currentTime} • UTC{utcOffset}</Text>
       </Flex>
-      <Text size="sm">{longName}</Text>
+      <Text size="sm" c={isMobile ? "dimmed" : undefined}>
+        {longName}
+      </Text>
     </Flex>
   );
 };
