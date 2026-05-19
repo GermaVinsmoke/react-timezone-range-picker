@@ -20,25 +20,32 @@ export const RelativeTimePanel = ({ tzRange }: IRelativeTimePanel) => {
 
   useEffect(() => {
     if (tzRange.timezone.name !== null) {
-      const timeOptions = getTimeOptions(tzRange.timezone.name);
+      const timeOptions = getTimeOptions(tzRange.timezone.name, tzRange.options);
       setFilteredOptions(timeOptions);
     }
-  }, [tzRange.timezone]);
+  }, [tzRange.timezone, tzRange.options]);
 
   useDebounce(
     () => {
+      if (!tzRange.timezone.name) return;
+
+      const allOptions = getTimeOptions(tzRange.timezone.name, tzRange.options);
       if (searchText === "") {
-        setFilteredOptions(getTimeOptions(tzRange.timezone.name!));
+        setFilteredOptions(allOptions);
         return;
       }
 
-      const newTimeOptions = filteredOptions.filter((value) =>
-        value.searchKey.includes(searchText)
+      const normalizedSearchText = searchText.toLowerCase();
+      setFilteredOptions(
+        allOptions.filter(
+          (value) =>
+            value.searchKey.includes(normalizedSearchText) ||
+            value.label.toLowerCase().includes(normalizedSearchText)
+        )
       );
-      setFilteredOptions(newTimeOptions);
     },
     250,
-    [searchText]
+    [searchText, tzRange.timezone, tzRange.options]
   );
 
   const handleRowClick = (option: ITimeOptions) => {
