@@ -1,0 +1,37 @@
+.trigger-button {
+  max-width: 100%;
+}
+
+.trigger-button :global(.mantine-Button-inner) {
+  min-width: 0;
+}
+
+.trigger-button :global(.mantine-Button-label) {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.picker-shell {
+  height: 100%;
+}
+
+.mobile-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.mobile-nav {
+  padding: 12px;
+}
+
+.mobile-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}

@@ -8,12 +8,20 @@ import { TzRange } from "../interfaces";
 import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
 import styled from "../styles/index.module.css";
 import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface IAroundTimePanel {
   tzRange: TzRange;
 }
 
 const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
+  const isTablet = useMediaQuery("(max-width: 64em)");
+  const { closePopover } = usePopoverContext();
+  const timezoneMeta = tzRange.timezone.utcOffset
+    ? `GMT${tzRange.timezone.utcOffset}`
+    : tzRange.timezone?.longName;
+
   const form = useForm({
     initialValues: {
       date: tzRange.startDate ?? getCurrentDate(tzRange),
@@ -46,6 +54,10 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
       endTime,
       timezone: tzRange.timezone,
     });
+
+    if (isTablet) {
+      closePopover();
+    }
   };
 
   return (
@@ -71,17 +83,24 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
               {...form.getInputProps("time")}
               leftSection={<IconClock stroke={1.5} />}
               rightSection={
-                <Text style={{ fontSize: 12, fontStyle: "italic", textAlign: "right" }}>
-                  {tzRange.timezone?.longName}
-                </Text>
+                !isTablet ? (
+                  <Text style={{ fontSize: 12, fontStyle: "italic", textAlign: "right" }}>
+                    {tzRange.timezone?.longName}
+                  </Text>
+                ) : undefined
               }
-              rightSectionWidth={180}
+              rightSectionWidth={!isTablet ? 180 : undefined}
               rightSectionProps={{
                 style: {
                   paddingRight: 1,
                 },
               }}
             />
+            {isTablet && timezoneMeta ? (
+              <Text size="xs" c="dimmed" mt={-4}>
+                {timezoneMeta}
+              </Text>
+            ) : null}
             <Select
               label="Duration"
               placeholder="Pick value"

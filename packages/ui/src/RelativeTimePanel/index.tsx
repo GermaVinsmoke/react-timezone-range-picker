@@ -6,6 +6,7 @@ import { useDebounce } from "react-use";
 import clsx from "clsx";
 import { useAppTheme } from "../hooks/useAppTheme";
 import { TzRange } from "../interfaces";
+import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface IRelativeTimePanel {
   tzRange: TzRange;
@@ -15,6 +16,7 @@ export const RelativeTimePanel = ({ tzRange }: IRelativeTimePanel) => {
   const [filteredOptions, setFilteredOptions] = useState<ITimeOptions[]>([]);
   const [searchText, setSearchText] = useState("");
   const { colorScheme } = useAppTheme();
+  const { closePopover } = usePopoverContext();
 
   useEffect(() => {
     if (tzRange.timezone.name !== null) {
@@ -50,14 +52,14 @@ export const RelativeTimePanel = ({ tzRange }: IRelativeTimePanel) => {
       endTime: endTime.slice(0, 8),
       timezone: tzRange.timezone,
     });
+    closePopover();
   };
 
   return (
-    <>
+    <Flex direction="column" className={styled["relative-time-root"]}>
       <Box style={{ width: "90%" }} mx={"auto"}>
         <Input
           placeholder="Relative time (15m, 1h, 1d, 1w)"
-          //   leftSection={<IconFilter2 stroke={2} color="#313B49" />}
           value={searchText}
           onChange={(e) => setSearchText(e.currentTarget.value)}
         />
@@ -84,6 +86,6 @@ export const RelativeTimePanel = ({ tzRange }: IRelativeTimePanel) => {
           </Flex>
         ))}
       </Flex>
-    </>
+    </Flex>
   );
 };

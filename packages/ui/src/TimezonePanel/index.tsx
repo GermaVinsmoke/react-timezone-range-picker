@@ -10,6 +10,8 @@ import { Footer } from "../Footer";
 import { TimezoneData, TzRange } from "../interfaces";
 import dayjs from "dayjs";
 import { toTz, toUtcIso } from "../util/dateTime";
+import { useMediaQuery } from "@mantine/hooks";
+import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface ITimezoneDataInternal {
   name: string;
@@ -27,6 +29,8 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
   const [selectedTimezone, setSelectedTimezone] = useState<TimezoneData | null>(tzRange.timezone);
   const [filteredTimezones, setFilteredTimezones] = useState<ITimezoneDataInternal[]>([]);
   const [searchText, setSearchText] = useState("");
+  const isTablet = useMediaQuery("(max-width: 64em)");
+  const { closePopover } = usePopoverContext();
 
   const timezones = useMemo(() => getTimezones(), []);
 
@@ -89,6 +93,10 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
         utcOffset: null,
       },
     });
+
+    if (isTablet) {
+      closePopover();
+    }
   };
 
   const getCurrentTimeInTz = (tzName: string | null) => {
@@ -98,11 +106,11 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
 
   return (
     <form className={commonStyled["form-container"]} onSubmit={handleApply}>
-      <Flex direction="column" style={{ height: "calc(100% - 40px)" }}>
-        <Box style={{ width: "95%" }} mx="auto">
+      <Flex direction="column" className={styled["timezone-panel-container"]}>
+        <Box className={styled["search-container"]}>
           <TimezoneSearch searchText={searchText} setSearchText={setSearchText} />
         </Box>
-        <Box style={{ overflowY: "scroll" }}>
+        <Box className={styled["timezone-scroll-area"]}>
           <Text fw={600} px={12}>
             My Location
           </Text>

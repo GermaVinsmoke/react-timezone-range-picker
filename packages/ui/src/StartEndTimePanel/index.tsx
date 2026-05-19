@@ -15,12 +15,20 @@ import { TzRange } from "../interfaces";
 import { useForm } from "@mantine/form";
 import styled from "../styles/index.module.css";
 import dayjs from "dayjs";
+import { useMediaQuery } from "@mantine/hooks";
+import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface IStartEndTimePanel {
   tzRange: TzRange;
 }
 
 const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
+  const isTablet = useMediaQuery("(max-width: 64em)");
+  const { closePopover } = usePopoverContext();
+  const timezoneMeta = tzRange.timezone.utcOffset
+    ? `GMT${tzRange.timezone.utcOffset}`
+    : tzRange.timezone?.longName;
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -63,6 +71,10 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
       endTime: endDateInTz.time,
       timezone: tzRange.timezone,
     });
+
+    if (isTablet) {
+      closePopover();
+    }
   };
 
   return (
@@ -85,17 +97,24 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               {...form.getInputProps("startTime")}
               leftSection={<IconClock stroke={1.5} />}
               rightSection={
-                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
-                  {tzRange.timezone?.longName}
-                </Text>
+                !isTablet ? (
+                  <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                    {tzRange.timezone?.longName}
+                  </Text>
+                ) : undefined
               }
-              rightSectionWidth={180}
+              rightSectionWidth={!isTablet ? 180 : undefined}
               rightSectionProps={{
                 style: {
                   paddingRight: 1,
                 },
               }}
             />
+            {isTablet && timezoneMeta ? (
+              <Text size="xs" c="dimmed" mt={-4}>
+                {timezoneMeta}
+              </Text>
+            ) : null}
             <DatePickerInput
               label="End time"
               key={form.key("endDate")}
@@ -110,17 +129,24 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
               {...form.getInputProps("endTime")}
               leftSection={<IconClock stroke={1.5} />}
               rightSection={
-                <Text style={{ fontSize: 12, fontStyle: "italic" }}>
-                  {tzRange.timezone?.longName}
-                </Text>
+                !isTablet ? (
+                  <Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                    {tzRange.timezone?.longName}
+                  </Text>
+                ) : undefined
               }
-              rightSectionWidth={180}
+              rightSectionWidth={!isTablet ? 180 : undefined}
               rightSectionProps={{
                 style: {
                   paddingRight: 1,
                 },
               }}
             />
+            {isTablet && timezoneMeta ? (
+              <Text size="xs" c="dimmed" mt={-4}>
+                {timezoneMeta}
+              </Text>
+            ) : null}
           </Flex>
         </Box>
         <Footer />
