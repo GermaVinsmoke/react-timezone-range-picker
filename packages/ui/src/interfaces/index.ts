@@ -14,6 +14,13 @@ export interface OnApplyParams {
   timezone: TimezoneData;
 }
 
+export interface TimezoneRangePickerOptions {
+  disableSeconds?: boolean;
+  disableMinutes?: boolean;
+  disableHours?: boolean;
+  disableDays?: boolean;
+}
+
 export interface TzRange {
   startDate: string | null;
   startTime: string | null;
@@ -26,4 +33,5 @@ export interface TzRange {
   onApply: ({ startDate, startTime, endDate, endTime, timezone }: OnApplyParams) => void;
 
   buttonStyle?: MantineStyleProp;
+  options?: TimezoneRangePickerOptions;
 }
