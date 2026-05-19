@@ -135,6 +135,9 @@ function App() {
           {...range}
           onApply={handleTimeRangeApply}
           // buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
+          options={{
+            disableSeconds: true,
+          }}
         />
         <Button onClick={toggle}>Toggle Theme</Button>
       </Flex>
