@@ -100,6 +100,21 @@ type TzRange = {
   timezone: TimezoneData;
 };
 
+const UTC_TIMEZONE: TimezoneData = {
+  name: "UTC",
+  longName: "Coordinated Universal Time",
+  utcOffset: "+00:00",
+};
+
+const convertDateTime = (date: string, time: string, sourceZone: string, targetZone: string) => {
+  const value = Temporal.PlainDateTime.from(`${date.replace(/\//g, "-")}T${time}`)
+    .toZonedDateTime(sourceZone)
+    .toInstant()
+    .toZonedDateTimeISO(targetZone);
+
+  return { date: formatDate(value), time: formatTime(value) };
+};
+
 function App() {
   const [range, setRange] = useState<TzRange>(getDefaultTzRange());
 
@@ -115,8 +130,61 @@ function App() {
     setRange({ startDate, startTime, endDate, endTime, timezone });
   };
 
-  const toggle = () =>
-    setColorScheme(colorScheme === "dark" ? "light" : "dark");
+  const toggle = () => setColorScheme(colorScheme === "dark" ? "light" : "dark");
+
+  const toggleTimezone = () => {
+    setRange((currentRange) => {
+      const localTimezone = getBrowserTimezone();
+      const targetTimezone = currentRange.timezone.name === "UTC" ? localTimezone : UTC_TIMEZONE;
+      const sourceZone = currentRange.timezone.name;
+      const isDateOnlyRange =
+        currentRange.startTime === "00:00:00" && currentRange.endTime === "00:00:00";
+
+      // Basic mode represents calendar dates rather than absolute instants. Keep the
+      // selected dates unchanged and anchor both boundaries to midnight when the
+      // display timezone changes.
+      if (isDateOnlyRange) {
+        return {
+          ...currentRange,
+          startTime: "00:00:00",
+          endTime: "00:00:00",
+          timezone: targetTimezone,
+        };
+      }
+
+      if (
+        !sourceZone ||
+        !targetTimezone.name ||
+        !currentRange.startDate ||
+        !currentRange.startTime ||
+        !currentRange.endDate ||
+        !currentRange.endTime
+      ) {
+        return { ...currentRange, timezone: targetTimezone };
+      }
+
+      const start = convertDateTime(
+        currentRange.startDate,
+        currentRange.startTime,
+        sourceZone,
+        targetTimezone.name
+      );
+      const end = convertDateTime(
+        currentRange.endDate,
+        currentRange.endTime,
+        sourceZone,
+        targetTimezone.name
+      );
+
+      return {
+        startDate: start.date,
+        startTime: start.time,
+        endDate: end.date,
+        endTime: end.time,
+        timezone: targetTimezone,
+      };
+    });
+  };
 
   return (
     <Box>
@@ -144,6 +212,9 @@ function App() {
             disableSeconds: true,
           }}
         />
+        <Button onClick={toggleTimezone} variant="outline">
+          {range.timezone.name === "UTC" ? "Use Local Timezone" : "Use UTC"}
+        </Button>
         <Button onClick={toggle}>Toggle Theme</Button>
       </Flex>
     </Box>
