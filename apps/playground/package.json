@@ -9,19 +9,20 @@
   "dependencies": {
     "@fontsource/geist": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
-    "@mantine/core": "^8.3.1",
-    "@mantine/dates": "^8.3.1",
-    "@mantine/hooks": "^8.3.1",
-    "react-timezone-range-picker": "workspace:*",
+    "@mantine/core": "^9.5.2",
+    "@mantine/dates": "^9.5.2",
+    "@mantine/form": "^9.5.2",
+    "@mantine/hooks": "^9.5.2",
     "add": "^2.0.6",
     "dayjs": "^1.11.18",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-timezone-range-picker": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.5.0",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react": "^5.0.2",
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
