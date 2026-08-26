@@ -1,6 +1,7 @@
 {
   "name": "react-timezone-range-picker-monorepo",
   "private": true,
+  "repository": "https://github.com/GermaVinsmoke/react-timezone-range-picker",
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
