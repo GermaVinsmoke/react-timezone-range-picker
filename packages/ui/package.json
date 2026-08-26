@@ -37,7 +37,6 @@
     "@mantine/dates": "^9.5.2",
     "@mantine/form": "^9.5.2",
     "@mantine/hooks": "^9.5.2",
-    "dayjs": "^1.11.18",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -57,7 +56,6 @@
     "@vitejs/plugin-react": "^5.0.2",
     "add": "^2.0.6",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.18",
     "eslint": "^9.35.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "jsdom": "^27.0.0",
@@ -67,5 +65,8 @@
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1"
   }
 }
