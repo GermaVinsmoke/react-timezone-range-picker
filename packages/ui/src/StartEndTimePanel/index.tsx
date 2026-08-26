@@ -7,6 +7,7 @@ import {
   getCurrentDate,
   getCurrentPlusDate,
   getCurrentTime,
+  parseDateTime,
   toTz,
   toUtcIso,
 } from "../util/dateTime";
@@ -14,7 +15,7 @@ import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { useForm } from "@mantine/form";
 import styled from "../styles/index.module.css";
-import dayjs from "dayjs";
+import { Temporal } from "@js-temporal/polyfill";
 import { useMediaQuery } from "@mantine/hooks";
 import { usePopoverContext } from "../Provider/PopoverProvider";
 
@@ -42,15 +43,19 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
       startTime: (value) => (value ? null : "Start time is required"),
       endDate: (value, values) => {
         if (!value) return "End date is required";
-        const start = dayjs(`${values.startDate} ${values.startTime}`);
-        const end = dayjs(`${value} ${values.endTime}`);
-        return end.isAfter(start) || end.isSame(start) ? null : "End time must be after start time";
+        const start = parseDateTime(values.startDate, values.startTime);
+        const end = parseDateTime(value, values.endTime);
+        return Temporal.PlainDateTime.compare(end, start) >= 0
+          ? null
+          : "End time must be after start time";
       },
       endTime: (value, values) => {
         if (!value) return "End time is required";
-        const start = dayjs(`${values.startDate} ${values.startTime}`);
-        const end = dayjs(`${values.endDate} ${value}`);
-        return end.isAfter(start) || end.isSame(start) ? null : "End time must be after start time";
+        const start = parseDateTime(values.startDate, values.startTime);
+        const end = parseDateTime(values.endDate, value);
+        return Temporal.PlainDateTime.compare(end, start) >= 0
+          ? null
+          : "End time must be after start time";
       },
     },
   });

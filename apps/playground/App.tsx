@@ -5,27 +5,33 @@ import {
 } from "react-timezone-range-picker";
 import { Box, Button, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+import { Temporal } from "@js-temporal/polyfill";
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+const nowInTimezone = (tzName?: string) =>
+  Temporal.Now.instant().toZonedDateTimeISO(tzName || Temporal.Now.timeZoneId());
 
-const getCurrentTime = () => dayjs().format("HH:mm:ss");
-const getCurrentTimeInTz = (tzName: string) =>
-  dayjs().tz(tzName).format("HH:mm:ss");
+const formatTime = (value: Temporal.ZonedDateTime) =>
+  `${value.hour.toString().padStart(2, "0")}:${value.minute
+    .toString()
+    .padStart(2, "0")}:${value.second.toString().padStart(2, "0")}`;
 
-const getCurrentDate = () => dayjs().format("YYYY/MM/DD");
-const getCurrentDateInTz = (tzName: string) =>
-  dayjs().tz(tzName).format("YYYY/MM/DD");
+const formatDate = (value: Temporal.ZonedDateTime) =>
+  `${value.year.toString().padStart(4, "0")}/${value.month
+    .toString()
+    .padStart(2, "0")}/${value.day.toString().padStart(2, "0")}`;
 
-const getCurrentPlusDate = (amount: number) =>
-  dayjs().add(amount, "day").format("YYYY/MM/DD");
+const formatDateTime = (value: Temporal.ZonedDateTime) =>
+  `${formatDate(value)} ${formatTime(value)}`;
+
+const getCurrentTime = () => formatTime(nowInTimezone());
+const getCurrentTimeInTz = (tzName: string) => formatTime(nowInTimezone(tzName));
+const getCurrentDate = () => formatDate(nowInTimezone());
+const getCurrentDateInTz = (tzName: string) => formatDate(nowInTimezone(tzName));
+const getCurrentPlusDate = (amount: number) => formatDate(nowInTimezone().add({ days: amount }));
 const getCurrentPlusDateInTz = (amount: number, tzName: string) =>
-  dayjs().tz(tzName).add(amount, "day").format("YYYY/MM/DD");
+  formatDate(nowInTimezone(tzName).add({ days: amount }));
 
-const getTimezoneOffest = (tzName: string) => dayjs().tz(tzName).format("Z");
+const getTimezoneOffset = (tzName: string) => nowInTimezone(tzName).offset;
 
 const getTimezoneLongName = (tzName: string) => {
   return (
@@ -39,11 +45,11 @@ const getTimezoneLongName = (tzName: string) => {
 };
 
 export const getBrowserTimezone = () => {
-  const name = dayjs.tz.guess();
-  const offset = getTimezoneOffest(name);
+  const name = Temporal.Now.timeZoneId();
+  const utcOffset = getTimezoneOffset(name);
   const longName = getTimezoneLongName(name);
 
-  return { name, longName, offset };
+  return { name, longName, utcOffset };
 };
 
 const DEFAULT_TIMEZONE = {
@@ -119,8 +125,7 @@ function App() {
       </Text>
       <Text>
         Current Time:{" "}
-        {range.timezone.name &&
-          dayjs().tz(range.timezone.name).format("YYYY/MM/DD HH:mm:ss")}
+        {range.timezone.name && formatDateTime(nowInTimezone(range.timezone.name))}
       </Text>
       <Text>UTC Offset: {range.timezone.utcOffset}</Text>
       <Text>
