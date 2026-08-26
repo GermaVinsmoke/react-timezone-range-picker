@@ -4,6 +4,8 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+packageExtensionsChecksum: sha256-TJLGpRW3GRfsf6mdQLeSlXUmf2g2DbRvZ2OF9mnO+yA=
+
 importers:
 
   .:
@@ -34,16 +36,16 @@ importers:
         version: 0.5.1
       '@mantine/core':
         specifier: ^9.5.2
-        version: 9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/dates':
         specifier: ^9.5.2
-        version: 9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/form':
         specifier: ^9.5.2
         version: 9.5.2(react@19.2.8)
       '@mantine/hooks':
         specifier: ^9.5.2
-        version: 9.5.2(react@19.2.8)
+        version: 9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       add:
         specifier: ^2.0.6
         version: 2.0.6
@@ -87,16 +89,16 @@ importers:
     devDependencies:
       '@mantine/core':
         specifier: ^9.5.2
-        version: 9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/dates':
         specifier: ^9.5.2
-        version: 9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/form':
         specifier: ^9.5.2
         version: 9.5.2(react@19.2.8)
       '@mantine/hooks':
         specifier: ^9.5.2
-        version: 9.5.2(react@19.2.8)
+        version: 9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tabler/icons-react':
         specifier: ^3.35.0
         version: 3.35.0(react@19.2.8)
@@ -575,6 +577,7 @@ packages:
     resolution: {integrity: sha512-CsANdaF07VRhcvDCupIvAPtIqU1NxYSc+bhFCCasDHpgJOUQxmqeMOGCCGSjtOOEIs+E+pt2ZbbdfnygDYPybA==}
     peerDependencies:
       react: ^19.2.0
+      react-dom: ^19.2.0
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2246,10 +2249,10 @@ snapshots:
     dependencies:
       jsbi: 4.3.2
 
-  '@mantine/core@9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@mantine/core@9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@floating-ui/react': 0.27.20(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@mantine/hooks': 9.5.2(react@19.2.8)
+      '@mantine/hooks': 9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       clsx: 2.1.1
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
@@ -2259,10 +2262,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dates@9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@mantine/dates@9.5.2(@mantine/core@9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(dayjs@1.11.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@mantine/core': 9.5.2(@mantine/hooks@9.5.2(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@mantine/hooks': 9.5.2(react@19.2.8)
+      '@mantine/core': 9.5.2(@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@mantine/hooks': 9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       clsx: 2.1.1
       dayjs: 1.11.18
       react: 19.2.8
@@ -2275,9 +2278,10 @@ snapshots:
       klona: 2.0.6
       react: 19.2.8
 
-  '@mantine/hooks@9.5.2(react@19.2.8)':
+  '@mantine/hooks@9.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
