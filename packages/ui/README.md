@@ -4,18 +4,32 @@
 
 [![npm version](https://img.shields.io/npm/v/react-timezone-range-picker?color=blue&label=npm)](https://www.npmjs.com/package/react-timezone-range-picker)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![React](https://img.shields.io/badge/react-18%2B-61dafb?logo=react)](https://react.dev)
+[![React](https://img.shields.io/badge/react-19.2%2B-61dafb?logo=react)](https://react.dev)
 
 ---
 
 ## ✨ Features
 
-- 📅 **Basic picker by default** with a date-range field and day-only quick ranges
-- 🛠️ **Advanced mode** for relative ranges, around-time selection, and timezone changes
+- 📅 **Basic picker by default** with a date-only range field and scrollable day quick ranges
+- 🛠️ **Advanced mode** with separate start/end date and time fields, relative ranges, around-time selection, and timezone changes
 - 🌍 **Timezone-aware** display and conversion via the Temporal API with an old-browser polyfill
 - 🎨 **Mantine 9** components for accessibility and theming
 - ⚡️ **TypeScript** support with generated definitions
 - 🪶 **Lightweight** build via `vite`, tree-shakeable ESM + CJS outputs
+
+---
+
+## Picker modes
+
+### Basic mode
+
+The picker opens in basic mode on every mount. It provides a compact date-only range field and day-based quick options. Date and quick-option selections are applied immediately without an Apply button, and both returned times are set to `00:00:00`.
+
+Select **Advanced** to switch modes for the lifetime of the mounted component. Reloading the page or remounting the picker resets it to basic mode.
+
+### Advanced mode
+
+Advanced mode provides the full picker with separate start/end date and time fields, relative time options, around-time selection, and timezone selection. Changes to its form-based panels are submitted with the Apply button.
 
 ---
 
@@ -47,6 +61,7 @@ You must install these in your project:
 ## Usage
 
 ```tsx
+import { useState } from "react";
 import {
   TimezoneRangePicker,
   type OnApplyParams,
@@ -62,9 +77,9 @@ const DEFAULT_TIMEZONE = {
 };
 
 const DEFAULT_RANGE = {
-  startDate: "2025-06-10",
+  startDate: "2025/06/10",
   startTime: "09:00:00",
-  endDate: "2025-06-11",
+  endDate: "2025/06/11",
   endTime: "18:00:00",
   timezone: DEFAULT_TIMEZONE,
 };
