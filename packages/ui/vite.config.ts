@@ -14,7 +14,14 @@ export default defineConfig({
     },
     rollupOptions: {
       // dependencies that shouldn’t be bundled
-      external: ["react", "react-dom", "@mantine/core", "@mantine/hooks", "@mantine/dates"],
+      external: [
+        "react",
+        "react-dom",
+        "@mantine/core",
+        "@mantine/dates",
+        "@mantine/form",
+        "@mantine/hooks",
+      ],
     },
     cssCodeSplit: false, // combine all CSS into a single file
     outDir: "dist",

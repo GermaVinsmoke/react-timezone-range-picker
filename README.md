@@ -12,7 +12,7 @@
 
 - 📅 **Start–End & Around-time panels** for absolute and relative time selection
 - 🌍 **Timezone-aware** display and conversion (via `dayjs`)
-- 🎨 **Mantine 8** components for accessibility and theming
+- 🎨 **Mantine 9** components for accessibility and theming
 - ⚡️ **TypeScript** support with generated definitions
 - 🪶 **Lightweight** build via `vite`, tree-shakeable ESM + CJS outputs
 
@@ -34,11 +34,12 @@ pnpm add react-timezone-range-picker
 **Peer dependencies:**  
 You must install these in your project:
 
-- `react` (>=18)
-- `react-dom` (>=18)
-- `@mantine/core` (>=8.3.1)
-- `@mantine/dates` (>=8.3.1)
-- `@mantine/hooks` (>=8.3.1)
+- `react` (>=19.2.0)
+- `react-dom` (>=19.2.0)
+- `@mantine/core` (>=9.5.2)
+- `@mantine/dates` (>=9.5.2)
+- `@mantine/form` (>=9.5.2)
+- `@mantine/hooks` (>=9.5.2)
 
 ---
 
