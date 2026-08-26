@@ -19,6 +19,27 @@
   height: 100%;
 }
 
+.basic-view {
+  padding: 12px;
+}
+
+.basic-quick-options {
+  height: 150px;
+  flex: none;
+  overflow-y: auto;
+}
+
+.drawer-view {
+  height: 100%;
+  min-height: 0;
+}
+
+.drawer-view .basic-view {
+  width: min(100%, 420px);
+  height: auto;
+  margin: 0 auto;
+}
+
 .mobile-layout {
   display: flex;
   flex-direction: column;
