@@ -7,7 +7,7 @@ import {
 } from "@tabler/icons-react";
 import styled from "./index.module.css";
 import { Dispatch, FC, SetStateAction } from "react";
-import { Panel } from "../TimezoneRangePicker";
+import { Panel } from "../TimezoneRangePicker/panels";
 import { RelativeTimePanel } from "../RelativeTimePanel";
 import { TzRange } from "../interfaces";
 

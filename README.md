@@ -10,7 +10,8 @@
 
 ## ✨ Features
 
-- 📅 **Start–End & Around-time panels** for absolute and relative time selection
+- 📅 **Basic picker by default** with a date-range field and day-only quick ranges
+- 🛠️ **Advanced mode** for relative ranges, around-time selection, and timezone changes
 - 🌍 **Timezone-aware** display and conversion via the Temporal API with an old-browser polyfill
 - 🎨 **Mantine 9** components for accessibility and theming
 - ⚡️ **TypeScript** support with generated definitions
