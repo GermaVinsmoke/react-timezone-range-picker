@@ -8,8 +8,7 @@ import styled from "./index.module.css";
 import commonStyled from "../styles/index.module.css";
 import { Footer } from "../Footer";
 import { TimezoneData, TzRange } from "../interfaces";
-import dayjs from "dayjs";
-import { toTz, toUtcIso } from "../util/dateTime";
+import { formatTwelveHourTime, nowInTimezone, toTz, toUtcIso } from "../util/dateTime";
 import { useMediaQuery } from "@mantine/hooks";
 import { usePopoverContext } from "../Provider/PopoverProvider";
 
@@ -101,7 +100,7 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
 
   const getCurrentTimeInTz = (tzName: string | null) => {
     if (!tzName) return "";
-    return dayjs().tz(tzName).format("h:mm A");
+    return formatTwelveHourTime(nowInTimezone(tzName));
   };
 
   return (

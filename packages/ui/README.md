@@ -11,7 +11,7 @@
 ## ✨ Features
 
 - 📅 **Start–End & Around-time panels** for absolute and relative time selection
-- 🌍 **Timezone-aware** display and conversion (via `dayjs`)
+- 🌍 **Timezone-aware** display and conversion via the Temporal API with an old-browser polyfill
 - 🎨 **Mantine 9** components for accessibility and theming
 - ⚡️ **TypeScript** support with generated definitions
 - 🪶 **Lightweight** build via `vite`, tree-shakeable ESM + CJS outputs

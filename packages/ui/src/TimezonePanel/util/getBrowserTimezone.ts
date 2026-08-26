@@ -1,11 +1,6 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+import { formatTwelveHourTime, nowInTimezone } from "../../util/dateTime";
 import { longTzName } from "./longTzName";
 import { parseOffset } from "./parseOffest";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const normalizeTimezone = (timezone: string) => {
   if (["UTC", "Etc/UTC", "GMT", "Etc/GMT"].includes(timezone)) return "UTC";
@@ -14,12 +9,13 @@ const normalizeTimezone = (timezone: string) => {
 
 export const getBrowserTimezone = () => {
   const tz = normalizeTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  const offset = dayjs().tz(tz).format("Z");
+  const now = nowInTimezone(tz);
+  const offset = now.offset;
 
   return {
     name: tz,
     longName: longTzName(tz),
-    currentTime: dayjs().tz(tz).format("h:mm A"),
+    currentTime: formatTwelveHourTime(now),
     utcOffset: offset,
     offsetMinutes: parseOffset(offset),
   };
