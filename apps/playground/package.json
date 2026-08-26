@@ -9,12 +9,12 @@
   "dependencies": {
     "@fontsource/geist": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "@js-temporal/polyfill": "^0.5.1",
     "@mantine/core": "^9.5.2",
     "@mantine/dates": "^9.5.2",
     "@mantine/form": "^9.5.2",
     "@mantine/hooks": "^9.5.2",
     "add": "^2.0.6",
-    "dayjs": "^1.11.18",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-timezone-range-picker": "workspace:*"
