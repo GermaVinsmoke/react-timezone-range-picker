@@ -11,9 +11,10 @@ import { Panel } from "./panels";
 
 interface AdvancedPickerViewProps {
   tzRange: TzRange;
+  onBasic: () => void;
 }
 
-export const AdvancedPickerView: FC<AdvancedPickerViewProps> = ({ tzRange }) => {
+export const AdvancedPickerView: FC<AdvancedPickerViewProps> = ({ tzRange, onBasic }) => {
   const [selectedPanel, setSelectedPanel] = useState<Panel>(Panel.START_END_TIME);
   const isTablet = useMediaQuery("(max-width: 64em)");
 
@@ -28,11 +29,11 @@ export const AdvancedPickerView: FC<AdvancedPickerViewProps> = ({ tzRange }) => 
       case Panel.RELATIVE_TIME:
         return <Sidebar tzRange={tzRange} setSelectedPanel={setSelectedPanel} mobileOnlyRelative />;
       case Panel.START_END_TIME:
-        return <StartEndTimePanel tzRange={tzRange} />;
+        return <StartEndTimePanel tzRange={tzRange} onBasic={onBasic} />;
       case Panel.AROUND_TIME:
-        return <AroundTimePanel tzRange={tzRange} />;
+        return <AroundTimePanel tzRange={tzRange} onBasic={onBasic} />;
       case Panel.TIMEZONE:
-        return <TimezonePanel tzRange={tzRange} />;
+        return <TimezonePanel tzRange={tzRange} onBasic={onBasic} />;
       default:
         return null;
     }

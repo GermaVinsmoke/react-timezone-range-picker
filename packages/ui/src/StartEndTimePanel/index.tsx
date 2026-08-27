@@ -21,9 +21,10 @@ import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface IStartEndTimePanel {
   tzRange: TzRange;
+  onBasic: () => void;
 }
 
-const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
+const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
   const isTablet = useMediaQuery("(max-width: 64em)");
   const { closePopover } = usePopoverContext();
   const timezoneMeta = tzRange.timezone.utcOffset
@@ -154,7 +155,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange }) => {
             ) : null}
           </Flex>
         </Box>
-        <Footer />
+        <Footer onBasic={onBasic} />
       </form>
     </Flex>
   );

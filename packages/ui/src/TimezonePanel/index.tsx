@@ -22,9 +22,10 @@ interface ITimezoneDataInternal {
 
 interface ITimezonePanel {
   tzRange: TzRange;
+  onBasic: () => void;
 }
 
-const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
+const TimezonePanel: FC<ITimezonePanel> = ({ tzRange, onBasic }) => {
   const [selectedTimezone, setSelectedTimezone] = useState<TimezoneData | null>(tzRange.timezone);
   const [filteredTimezones, setFilteredTimezones] = useState<ITimezoneDataInternal[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -142,7 +143,7 @@ const TimezonePanel: FC<ITimezonePanel> = ({ tzRange }) => {
         </Box>
       </Flex>
       <Box px={12}>
-        <Footer />
+        <Footer onBasic={onBasic} />
       </Box>
     </form>
   );

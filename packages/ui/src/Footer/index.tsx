@@ -3,18 +3,31 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useAppTheme } from "../hooks/useAppTheme";
 import { usePopoverContext } from "../Provider/PopoverProvider";
 
-export const Footer = () => {
+interface FooterProps {
+  onBasic: () => void;
+}
+
+export const Footer = ({ onBasic }: FooterProps) => {
   const { theme } = useAppTheme();
   const { closePopover } = usePopoverContext();
   const isMobile = useMediaQuery("(max-width: 48em)");
   const isTablet = useMediaQuery("(max-width: 64em)");
 
   return (
-    <Flex justify={"flex-end"} mt={12} pb={12}>
+    <Flex justify="space-between" align="flex-end" gap={12} mt={12} pb={12}>
+      <Button
+        type="button"
+        size="xs"
+        variant="subtle"
+        color={theme.primaryColor}
+        onClick={onBasic}
+      >
+        Basic
+      </Button>
       <Flex
         direction={isMobile ? "column" : "row"}
         gap={12}
-        w={isTablet ? "100%" : undefined}
+        flex={isTablet ? 1 : undefined}
       >
         <Button
           size="xs"

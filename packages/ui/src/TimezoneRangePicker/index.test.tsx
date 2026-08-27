@@ -52,7 +52,7 @@ describe("TimezoneRangePicker modes", () => {
     );
   });
 
-  it("switches to the original advanced view without a basic-mode action", async () => {
+  it("switches between the basic and advanced views", async () => {
     renderPicker();
     fireEvent.click(screen.getByRole("button", { name: /2024\/01\/01/ }));
     fireEvent.click(await screen.findByText("Advanced"));
@@ -61,10 +61,19 @@ describe("TimezoneRangePicker modes", () => {
     expect(screen.getByLabelText("Start time")).toBeInTheDocument();
     expect(screen.getByLabelText("End time")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Apply", hidden: true })).toBeInTheDocument();
-    expect(screen.queryByText("Basic mode")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Basic", hidden: true })).toBeInTheDocument();
     expect(screen.getByRole("dialog", { hidden: true })).toHaveStyle({
       width: "700px",
       height: "400px",
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Basic", hidden: true }));
+
+    expect(await screen.findByLabelText("Date range")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Apply" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { hidden: true })).toHaveStyle({
+      width: "260px",
+      height: "auto",
     });
   });
 });

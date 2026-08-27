@@ -13,9 +13,10 @@ import { usePopoverContext } from "../Provider/PopoverProvider";
 
 interface IAroundTimePanel {
   tzRange: TzRange;
+  onBasic: () => void;
 }
 
-const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
+const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
   const isTablet = useMediaQuery("(max-width: 64em)");
   const { closePopover } = usePopoverContext();
   const timezoneMeta = tzRange.timezone.utcOffset
@@ -111,7 +112,7 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange }) => {
             />
           </Flex>
         </Box>
-        <Footer />
+        <Footer onBasic={onBasic} />
       </form>
     </Flex>
   );

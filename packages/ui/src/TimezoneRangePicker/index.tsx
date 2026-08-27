@@ -37,7 +37,7 @@ const TimezoneRangePickerView: FC<TzRange> = (tzRange) => {
     mode === "basic" ? (
       <BasicPickerView tzRange={tzRange} onAdvanced={() => setMode("advanced")} />
     ) : (
-      <AdvancedPickerView tzRange={tzRange} />
+      <AdvancedPickerView tzRange={tzRange} onBasic={() => setMode("basic")} />
     );
 
   const trigger = (
