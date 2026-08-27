@@ -14,7 +14,13 @@ export interface OnApplyParams {
   timezone: TimezoneData;
 }
 
+export type AllowedTimeRange = "past" | "future" | "all";
+
 export interface TimezoneRangePickerOptions {
+  /** Limits quick options and manual selection. Defaults to all time. */
+  allowedTimeRange?: AllowedTimeRange;
+  /** Adds the whole current calendar day to Last/Next day quick ranges. Defaults to false. */
+  includeTodayInQuickRanges?: boolean;
   disableSeconds?: boolean;
   disableMinutes?: boolean;
   disableHours?: boolean;

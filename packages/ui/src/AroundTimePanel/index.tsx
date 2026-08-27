@@ -2,7 +2,15 @@ import { FC } from "react";
 import { Box, Flex, Select, Text } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import { DATEFORMAT, getCurrentDate, getCurrentTime, toTz, toUtcIso } from "../util/dateTime";
+import {
+  DATEFORMAT,
+  getAllowedDateBounds,
+  getCurrentDate,
+  getCurrentTime,
+  toTz,
+  toUtcIso,
+  validateAllowedDateTime,
+} from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
 import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
@@ -22,6 +30,8 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
   const timezoneMeta = tzRange.timezone.utcOffset
     ? `GMT${tzRange.timezone.utcOffset}`
     : tzRange.timezone?.longName;
+  const allowedTimeRange = tzRange.options?.allowedTimeRange;
+  const dateBounds = getAllowedDateBounds(tzRange.timezone.name, allowedTimeRange);
 
   const form = useForm({
     initialValues: {
@@ -30,9 +40,45 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
       duration: TimeOption.OneDay,
     },
     validate: {
-      date: (value) => (value ? null : "Date is required"),
-      time: (value) => (value ? null : "Time is required"),
-      duration: (value) => (value ? null : "Duration is required"),
+      date: (value, values) => {
+        if (!value) return "Date is required";
+        if (!values.time) return null;
+        return validateAllowedDateTime(
+          value,
+          values.time,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+      },
+      time: (value, values) => {
+        if (!value) return "Time is required";
+        if (!values.date) return null;
+        return validateAllowedDateTime(
+          values.date,
+          value,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+      },
+      duration: (value, values) => {
+        if (!value) return "Duration is required";
+        if (!values.date || !values.time) return null;
+        const range = getStartEndDateTime(values.date, values.time, value);
+        return (
+          validateAllowedDateTime(
+            range.startDate!,
+            range.startTime,
+            tzRange.timezone.name,
+            allowedTimeRange
+          ) ||
+          validateAllowedDateTime(
+            range.endDate!,
+            range.endTime,
+            tzRange.timezone.name,
+            allowedTimeRange
+          )
+        );
+      },
     },
   });
 
@@ -73,6 +119,8 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
               key={form.key("date")}
               {...form.getInputProps("date")}
               popoverProps={{ withinPortal: false }}
+              minDate={dateBounds.minDate}
+              maxDate={dateBounds.maxDate}
               valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />

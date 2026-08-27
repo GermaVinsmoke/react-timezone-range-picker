@@ -8,7 +8,7 @@ import { usePopoverContext } from "../Provider/PopoverProvider";
 import { getTimeOptions } from "../RelativeTimePanel/timeOptions";
 import quickStyles from "../RelativeTimePanel/index.module.css";
 import { TzRange } from "../interfaces";
-import { DATEFORMAT } from "../util/dateTime";
+import { DATEFORMAT, getAllowedDateBounds } from "../util/dateTime";
 import styled from "./index.module.css";
 
 interface BasicPickerViewProps {
@@ -39,8 +39,19 @@ export const BasicPickerView: FC<BasicPickerViewProps> = ({ tzRange, onAdvanced 
       disableSeconds: true,
       disableMinutes: true,
       disableHours: true,
+      allowedTimeRange: tzRange.options?.allowedTimeRange,
+      includeTodayInQuickRanges: tzRange.options?.includeTodayInQuickRanges,
     });
-  }, [tzRange.timezone.name]);
+  }, [
+    tzRange.timezone.name,
+    tzRange.options?.allowedTimeRange,
+    tzRange.options?.includeTodayInQuickRanges,
+  ]);
+
+  const dateBounds = getAllowedDateBounds(
+    tzRange.timezone.name,
+    tzRange.options?.allowedTimeRange
+  );
 
   const applyDateRange = ([startDate, endDate]: DateRangeValue) => {
     setDateRange([startDate, endDate]);
@@ -78,6 +89,8 @@ export const BasicPickerView: FC<BasicPickerViewProps> = ({ tzRange, onAdvanced 
         onChange={applyDateRange}
         valueFormat={DATEFORMAT}
         popoverProps={{ withinPortal: false }}
+        minDate={dateBounds.minDate}
+        maxDate={dateBounds.maxDate}
         leftSection={<IconCalendar stroke={1.5} />}
       />
 

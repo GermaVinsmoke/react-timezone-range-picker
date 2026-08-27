@@ -31,6 +31,24 @@ Select **Advanced** to switch modes for the lifetime of the mounted component. R
 
 Advanced mode provides the full picker with separate start/end date and time fields, relative time options, around-time selection, and timezone selection. Changes to its form-based panels are submitted with the Apply button.
 
+### Restricting past or future ranges
+
+Set `options.allowedTimeRange` to `"past"`, `"future"`, or `"all"` (the default). This filters quick options, limits date pickers, and validates date/time input against the current time in the selected timezone.
+
+```tsx
+<TimezoneRangePicker
+  {...range}
+  onApply={handleTimeRangeApply}
+  options={{
+    allowedTimeRange: "future",
+    // Adds today as a whole calendar day to Last/Next day ranges
+    includeTodayInQuickRanges: true,
+  }}
+/>
+```
+
+By default, `Last 2 days` and `Next 2 days` select two complete days before or after today. Set `includeTodayInQuickRanges` to `true` to add today to those ranges.
+
 ---
 
 ## 📦 Installation

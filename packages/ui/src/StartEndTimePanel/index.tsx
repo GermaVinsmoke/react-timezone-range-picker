@@ -7,7 +7,9 @@ import {
   getCurrentDate,
   getCurrentPlusDate,
   getCurrentTime,
+  getAllowedDateBounds,
   parseDateTime,
+  validateAllowedDateTime,
   toTz,
   toUtcIso,
 } from "../util/dateTime";
@@ -30,6 +32,8 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
   const timezoneMeta = tzRange.timezone.utcOffset
     ? `GMT${tzRange.timezone.utcOffset}`
     : tzRange.timezone?.longName;
+  const allowedTimeRange = tzRange.options?.allowedTimeRange;
+  const dateBounds = getAllowedDateBounds(tzRange.timezone.name, allowedTimeRange);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -40,10 +44,36 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
       endTime: tzRange.endTime ?? getCurrentTime(tzRange),
     },
     validate: {
-      startDate: (value) => (value ? null : "Start date is required"),
-      startTime: (value) => (value ? null : "Start time is required"),
+      startDate: (value, values) => {
+        if (!value) return "Start date is required";
+        if (!values.startTime) return null;
+        return validateAllowedDateTime(
+          value,
+          values.startTime,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+      },
+      startTime: (value, values) => {
+        if (!value) return "Start time is required";
+        if (!values.startDate) return null;
+        return validateAllowedDateTime(
+          values.startDate,
+          value,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+      },
       endDate: (value, values) => {
         if (!value) return "End date is required";
+        if (!values.endTime) return null;
+        const allowedError = validateAllowedDateTime(
+          value,
+          values.endTime,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+        if (allowedError) return allowedError;
         const start = parseDateTime(values.startDate, values.startTime);
         const end = parseDateTime(value, values.endTime);
         return Temporal.PlainDateTime.compare(end, start) >= 0
@@ -52,6 +82,14 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
       },
       endTime: (value, values) => {
         if (!value) return "End time is required";
+        if (!values.endDate) return null;
+        const allowedError = validateAllowedDateTime(
+          values.endDate,
+          value,
+          tzRange.timezone.name,
+          allowedTimeRange
+        );
+        if (allowedError) return allowedError;
         const start = parseDateTime(values.startDate, values.startTime);
         const end = parseDateTime(values.endDate, value);
         return Temporal.PlainDateTime.compare(end, start) >= 0
@@ -94,6 +132,8 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
               key={form.key("startDate")}
               {...form.getInputProps("startDate")}
               popoverProps={{ withinPortal: false }}
+              minDate={dateBounds.minDate}
+              maxDate={dateBounds.maxDate}
               valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />
@@ -126,6 +166,8 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
               key={form.key("endDate")}
               {...form.getInputProps("endDate")}
               popoverProps={{ withinPortal: false }}
+              minDate={dateBounds.minDate}
+              maxDate={dateBounds.maxDate}
               valueFormat={DATEFORMAT}
               leftSection={<IconCalendar stroke={1.5} />}
             />

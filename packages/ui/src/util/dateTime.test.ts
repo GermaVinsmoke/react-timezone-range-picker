@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   formatShortDate,
   formatTwelveHourTime,
+  getAllowedDateBounds,
   getCurrentDate,
   getCurrentTime,
   getFutureDateTime,
@@ -12,6 +13,7 @@ import {
   parseDateTime,
   toTz,
   toUtcIso,
+  validateAllowedDateTime,
 } from "./dateTime";
 import type { TzRange } from "../interfaces";
 
@@ -98,6 +100,26 @@ describe("Temporal timezone conversion", () => {
     vi.restoreAllMocks();
     setNow("2024-07-15T12:00:00Z");
     expect(getShortTimezoneName("America/New_York")).toBe("-04:00");
+  });
+
+  it("creates date bounds and validates past/future selections", () => {
+    setNow("2024-01-15T12:00:00Z");
+
+    expect(getAllowedDateBounds("UTC", "future")).toEqual({
+      minDate: "2024-01-15",
+      maxDate: undefined,
+    });
+    expect(getAllowedDateBounds("UTC", "past")).toEqual({
+      minDate: undefined,
+      maxDate: "2024-01-15",
+    });
+    expect(validateAllowedDateTime("2024/01/15", "11:59:59", "UTC", "future")).toBe(
+      "Date and time must not be before now"
+    );
+    expect(validateAllowedDateTime("2024/01/15", "12:00:01", "UTC", "past")).toBe(
+      "Date and time must not be after now"
+    );
+    expect(validateAllowedDateTime("2024/01/15", "12:00:01", "UTC", "future")).toBeNull();
   });
 
   it("gets the current date and time in the selected timezone", () => {

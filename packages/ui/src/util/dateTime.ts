@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { TzRange } from "../interfaces";
+import { AllowedTimeRange, TzRange } from "../interfaces";
 
 export const DATEFORMAT = "YYYY/MM/DD";
 export const TIMEFORMAT = "HH:mm:ss";
@@ -76,6 +76,38 @@ export const parseDate = (date: string) => Temporal.PlainDate.from(date.replace(
 
 export const parseDateTime = (date: string, time: string) =>
   Temporal.PlainDateTime.from(`${date.replace(/\//g, "-")}T${time}`);
+
+export const getAllowedDateBounds = (
+  timezone: string | null,
+  allowedTimeRange: AllowedTimeRange = "all"
+) => {
+  const today = nowInTimezone(timezone).toPlainDate().toString();
+  return {
+    minDate: allowedTimeRange === "future" ? today : undefined,
+    maxDate: allowedTimeRange === "past" ? today : undefined,
+  };
+};
+
+export const validateAllowedDateTime = (
+  date: string,
+  time: string,
+  timezone: string | null,
+  allowedTimeRange: AllowedTimeRange = "all"
+) => {
+  if (allowedTimeRange === "all") return null;
+
+  const value = parseDateTime(date, time);
+  const now = nowInTimezone(timezone).toPlainDateTime();
+  const comparison = Temporal.PlainDateTime.compare(value, now);
+
+  if (allowedTimeRange === "future" && comparison < 0) {
+    return "Date and time must not be before now";
+  }
+  if (allowedTimeRange === "past" && comparison > 0) {
+    return "Date and time must not be after now";
+  }
+  return null;
+};
 
 const durationFor = (amount: number, unit: DateTimeUnit): Temporal.DurationLike => ({
   [`${unit}s`]: amount,
