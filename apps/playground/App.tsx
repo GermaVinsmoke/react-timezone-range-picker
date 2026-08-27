@@ -2,6 +2,7 @@ import {
   TimezoneRangePicker,
   type TimezoneData,
   type OnApplyParams,
+  type AllowedTimeRange,
 } from "react-timezone-range-picker";
 import { Box, Button, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
@@ -117,6 +118,8 @@ const convertDateTime = (date: string, time: string, sourceZone: string, targetZ
 
 function App() {
   const [range, setRange] = useState<TzRange>(getDefaultTzRange());
+  const [allowedTimeRange, setAllowedTimeRange] = useState<AllowedTimeRange>("all");
+  const [includeTodayInQuickRanges, setIncludeTodayInQuickRanges] = useState(false);
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -210,12 +213,41 @@ function App() {
           // buttonStyle={{ height: "50px", fontSize: "13px", fontWeight: 300 }}
           options={{
             disableSeconds: true,
+            allowedTimeRange,
+            includeTodayInQuickRanges,
           }}
         />
         <Button onClick={toggleTimezone} variant="outline">
           {range.timezone.name === "UTC" ? "Use Local Timezone" : "Use UTC"}
         </Button>
         <Button onClick={toggle}>Toggle Theme</Button>
+      </Flex>
+      <Flex gap={8} mt={12} align="center" wrap="wrap">
+        <Text size="sm" fw={600}>
+          Allowed time range:
+        </Text>
+        {(["all", "past", "future"] as const).map((value) => (
+          <Button
+            key={value}
+            size="xs"
+            variant={allowedTimeRange === value ? "filled" : "outline"}
+            onClick={() => setAllowedTimeRange(value)}
+          >
+            {value === "all" ? "Past + Future (All)" : value === "past" ? "Past + Now" : "Now + Future"}
+          </Button>
+        ))}
+      </Flex>
+      <Flex gap={8} mt={8} align="center">
+        <Text size="sm" fw={600}>
+          Include today in Last/Next day quick ranges:
+        </Text>
+        <Button
+          size="xs"
+          variant={includeTodayInQuickRanges ? "filled" : "outline"}
+          onClick={() => setIncludeTodayInQuickRanges((included) => !included)}
+        >
+          {includeTodayInQuickRanges ? "Included" : "Not included"}
+        </Button>
       </Flex>
     </Box>
   );
