@@ -25,7 +25,7 @@
 
 The picker opens in basic mode on every mount. It provides a compact date-only range field and day-based quick options. Date and quick-option selections are applied immediately without an Apply button, and both returned times are set to `00:00:00`.
 
-Select **Advanced** to switch modes for the lifetime of the mounted component. Reloading the page or remounting the picker resets it to basic mode.
+Select **Advanced** to open the full picker. In Advanced mode, use the **Basic** button on the left side of the footer to return to Basic mode.
 
 ### Advanced mode
 
@@ -47,7 +47,7 @@ Set `options.allowedTimeRange` to `"past"`, `"future"`, or `"all"` (the default)
 />
 ```
 
-By default, `Last 2 days` and `Next 2 days` select two complete days before or after today. Set `includeTodayInQuickRanges` to `true` to add today to those ranges.
+`Today`, `Yesterday`, and `Tomorrow` use complete calendar-day boundaries (for example, Today 00:00 through Tomorrow 00:00). By default, `Last 2 days` and `Next 2 days` select two complete days before or after today. Set `includeTodayInQuickRanges` to `true` to add the complete current day to those ranges.
 
 ---
 
