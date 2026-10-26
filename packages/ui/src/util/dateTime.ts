@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { AllowedTimeRange, TzRange } from "../interfaces";
+import { AllowedTimeRange, RangeDuration, TzRange } from "../interfaces";
 
 export const DATEFORMAT = "YYYY/MM/DD";
 export const TIMEFORMAT = "HH:mm:ss";
@@ -107,6 +107,60 @@ export const validateAllowedDateTime = (
     return "Date and time must not be after now";
   }
   return null;
+};
+
+const RANGE_DURATION_UNITS = [
+  ["years", "year"],
+  ["months", "month"],
+  ["weeks", "week"],
+  ["days", "day"],
+  ["hours", "hour"],
+  ["minutes", "minute"],
+  ["seconds", "second"],
+] as const;
+
+/** Describes a range duration for messages, e.g. "1 month" or "2 weeks 3 days". */
+export const formatRangeDuration = (duration: RangeDuration) =>
+  RANGE_DURATION_UNITS.filter(([unit]) => duration[unit])
+    .map(([unit, singular]) => `${duration[unit]} ${duration[unit] === 1 ? singular : unit}`)
+    .join(" ");
+
+/** True when end lies further from start than maxRange allows; no limit is never exceeded. */
+export const exceedsMaxRange = (
+  start: Temporal.PlainDateTime,
+  end: Temporal.PlainDateTime,
+  maxRange?: RangeDuration
+) => !!maxRange && Temporal.PlainDateTime.compare(end, start.add(maxRange)) > 0;
+
+export const validateMaxRange = (
+  startDate: string,
+  startTime: string,
+  endDate: string,
+  endTime: string,
+  maxRange?: RangeDuration
+) =>
+  exceedsMaxRange(parseDateTime(startDate, startTime), parseDateTime(endDate, endTime), maxRange)
+    ? `Range must not exceed ${formatRangeDuration(maxRange!)}`
+    : null;
+
+const laterDate = (a?: string, b?: string) => (!a ? b : !b ? a : a > b ? a : b);
+const earlierDate = (a?: string, b?: string) => (!a ? b : !b ? a : a < b ? a : b);
+
+/**
+ * Calendar bounds once a range start is picked: the days within maxRange of it,
+ * narrowed further by any existing bounds. Dates are YYYY-MM-DD.
+ */
+export const getMaxRangeDateBounds = (
+  anchorDate: string,
+  maxRange: RangeDuration | undefined,
+  bounds: { minDate?: string; maxDate?: string } = {}
+) => {
+  if (!maxRange) return bounds;
+  const anchor = Temporal.PlainDate.from(anchorDate).toPlainDateTime();
+  return {
+    minDate: laterDate(bounds.minDate, anchor.subtract(maxRange).toPlainDate().toString()),
+    maxDate: earlierDate(bounds.maxDate, anchor.add(maxRange).toPlainDate().toString()),
+  };
 };
 
 const durationFor = (amount: number, unit: DateTimeUnit): Temporal.DurationLike => ({

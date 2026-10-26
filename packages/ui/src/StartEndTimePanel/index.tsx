@@ -12,6 +12,8 @@ import {
   validateAllowedDateTime,
   toTz,
   toUtcIso,
+  formatRangeDuration,
+  validateMaxRange,
 } from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
@@ -34,6 +36,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
     : tzRange.timezone?.longName;
   const allowedTimeRange = tzRange.options?.allowedTimeRange;
   const dateBounds = getAllowedDateBounds(tzRange.timezone.name, allowedTimeRange);
+  const maxRange = tzRange.options?.maxRange;
 
   const form = useForm({
     mode: "uncontrolled",
@@ -76,9 +79,8 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
         if (allowedError) return allowedError;
         const start = parseDateTime(values.startDate, values.startTime);
         const end = parseDateTime(value, values.endTime);
-        return Temporal.PlainDateTime.compare(end, start) >= 0
-          ? null
-          : "End time must be after start time";
+        if (Temporal.PlainDateTime.compare(end, start) < 0) return "End time must be after start time";
+        return validateMaxRange(values.startDate, values.startTime, value, values.endTime, maxRange);
       },
       endTime: (value, values) => {
         if (!value) return "End time is required";
@@ -92,9 +94,8 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
         if (allowedError) return allowedError;
         const start = parseDateTime(values.startDate, values.startTime);
         const end = parseDateTime(values.endDate, value);
-        return Temporal.PlainDateTime.compare(end, start) >= 0
-          ? null
-          : "End time must be after start time";
+        if (Temporal.PlainDateTime.compare(end, start) < 0) return "End time must be after start time";
+        return validateMaxRange(values.startDate, values.startTime, values.endDate, value, maxRange);
       },
     },
   });
@@ -163,6 +164,7 @@ const StartEndTimePanel: FC<IStartEndTimePanel> = ({ tzRange, onBasic }) => {
             ) : null}
             <DatePickerInput
               label="End time"
+              description={maxRange ? `At most ${formatRangeDuration(maxRange)} after the start` : undefined}
               key={form.key("endDate")}
               {...form.getInputProps("endDate")}
               popoverProps={{ withinPortal: false }}

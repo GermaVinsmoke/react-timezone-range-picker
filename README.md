@@ -49,6 +49,23 @@ Set `options.allowedTimeRange` to `"past"`, `"future"`, or `"all"` (the default)
 
 `Today`, `Yesterday`, and `Tomorrow` use complete calendar-day boundaries (for example, Today 00:00 through Tomorrow 00:00). By default, `Last 2 days` and `Next 2 days` select two complete days before or after today. Set `includeTodayInQuickRanges` to `true` to add the complete current day to those ranges.
 
+### Limiting the range length
+
+Set `options.maxRange` to the longest range users may select, as a duration such as `{ months: 1 }`, `{ days: 30 }`, `{ weeks: 2 }` or `{ hours: 36 }`. The limit is measured from the start on the calendar, so `{ months: 1 }` allows Jan 15 → Feb 15.
+
+- Quick options longer than the limit are hidden.
+- In basic mode, once a start date is picked, days beyond the limit are disabled.
+- Start and end times longer than the limit fail validation ("Range must not exceed 1 month").
+- Around-a-time durations whose window exceeds the limit are not offered.
+
+```tsx
+<TimezoneRangePicker
+  {...range}
+  onApply={handleTimeRangeApply}
+  options={{ maxRange: { months: 1 } }}
+/>
+```
+
 ---
 
 ## 📦 Installation
