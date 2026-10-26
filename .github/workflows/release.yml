@@ -1,9 +1,14 @@
 # Publishes packages/ui to npm when main carries a version npm does not have yet,
 # then tags that commit v<version> and creates a GitHub Release for it.
 #
+# To release: bump "version" in packages/ui/package.json in a pull request and
+# merge it. Versions npm already has are skipped. If a run fails after npm
+# accepted the package, re-running it only creates the missing tag and release.
+#
 # npm authenticates this workflow through trusted publishing (OIDC), so no npm
 # token is stored in the repository. The package's trusted publisher on
-# npmjs.com must name this repository and the workflow file release.yml.
+# npmjs.com must name this repository and the workflow file release.yml, and
+# allow `npm publish` (new trusted publishers allow only `npm stage publish`).
 name: Release
 
 on:
