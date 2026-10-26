@@ -134,3 +134,16 @@ function App() {
   );
 }
 ```
+
+---
+
+## Releasing
+
+Releases are published by the [Release workflow](https://github.com/GermaVinsmoke/react-timezone-range-picker/blob/main/.github/workflows/release.yml) when a new version reaches `main`:
+
+1. Bump `version` in `packages/ui/package.json` in your pull request.
+2. Merge it to `main`.
+
+The workflow skips versions npm already has. For a new one it runs the tests, publishes the package to npm with provenance, then tags the commit `v<version>` and creates a GitHub Release with generated notes. If a run fails after publishing, re-running it only creates the missing tag and release.
+
+npm authenticates the workflow through [trusted publishing](https://docs.npmjs.com/trusted-publishers), so no npm token is stored in the repository.
