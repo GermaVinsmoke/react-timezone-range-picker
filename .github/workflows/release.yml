@@ -1,0 +1,93 @@
+# Publishes packages/ui to npm when main carries a version npm does not have yet,
+# then tags that commit v<version> and creates a GitHub Release for it.
+#
+# npm authenticates this workflow through trusted publishing (OIDC), so no npm
+# token is stored in the repository. The package's trusted publisher on
+# npmjs.com must name this repository and the workflow file release.yml.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One release at a time; a later push waits instead of racing the publish.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push the tag and create the GitHub Release
+  id-token: write # npm trusted publishing and provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Read the package version
+        id: package
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+          if npm view "$name@$version" version > /dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "$name@$version is already on npm; nothing to publish."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          # Checked separately so a re-run can still tag a version whose publish succeeded.
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" > /dev/null; then
+            echo "tagged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tagged=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.package.outputs.published == 'false'
+        working-directory: .
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        if: steps.package.outputs.published == 'false'
+        run: pnpm test
+
+      # Trusted publishing needs npm 11.5.1 or newer.
+      - name: Update npm
+        if: steps.package.outputs.published == 'false'
+        run: npm install -g npm@latest
+
+      # prepublishOnly builds dist; trusted publishing adds provenance automatically.
+      - name: Publish to npm
+        if: steps.package.outputs.published == 'false'
+        run: npm publish --access public
+
+      - name: Tag and create the GitHub Release
+        if: steps.package.outputs.tagged == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
+            --generate-notes
