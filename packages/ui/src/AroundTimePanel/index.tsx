@@ -10,10 +10,11 @@ import {
   toTz,
   toUtcIso,
   validateAllowedDateTime,
+  validateMaxRange,
 } from "../util/dateTime";
 import { Footer } from "../Footer";
 import { TzRange } from "../interfaces";
-import { getStartEndDateTime, TIME_OPTIONS, TimeOption } from "./util";
+import { getAllowedTimeOptions, getStartEndDateTime, TimeOption } from "./util";
 import styled from "../styles/index.module.css";
 import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
@@ -32,12 +33,16 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
     : tzRange.timezone?.longName;
   const allowedTimeRange = tzRange.options?.allowedTimeRange;
   const dateBounds = getAllowedDateBounds(tzRange.timezone.name, allowedTimeRange);
+  const maxRange = tzRange.options?.maxRange;
+  const durations = getAllowedTimeOptions(maxRange);
 
   const form = useForm({
     initialValues: {
       date: tzRange.startDate ?? getCurrentDate(tzRange),
       time: tzRange.startTime ?? getCurrentTime(tzRange),
-      duration: TimeOption.OneDay,
+      duration: durations.includes(TimeOption.OneDay)
+        ? TimeOption.OneDay
+        : durations[durations.length - 1],
     },
     validate: {
       date: (value, values) => {
@@ -65,6 +70,7 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
         if (!values.date || !values.time) return null;
         const range = getStartEndDateTime(values.date, values.time, value);
         return (
+          validateMaxRange(range.startDate!, range.startTime, range.endDate!, range.endTime, maxRange) ||
           validateAllowedDateTime(
             range.startDate!,
             range.startTime,
@@ -153,7 +159,7 @@ const AroundTimePanel: FC<IAroundTimePanel> = ({ tzRange, onBasic }) => {
             <Select
               label="Duration"
               placeholder="Pick value"
-              data={TIME_OPTIONS}
+              data={durations}
               key={form.key("duration")}
               {...form.getInputProps("duration")}
               comboboxProps={{ withinPortal: false }}

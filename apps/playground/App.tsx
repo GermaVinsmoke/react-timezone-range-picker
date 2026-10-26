@@ -3,6 +3,7 @@ import {
   type TimezoneData,
   type OnApplyParams,
   type AllowedTimeRange,
+  type RangeDuration,
 } from "react-timezone-range-picker";
 import { Box, Button, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
@@ -101,6 +102,13 @@ type TzRange = {
   timezone: TimezoneData;
 };
 
+const MAX_RANGE_CHOICES: { label: string; value?: RangeDuration }[] = [
+  { label: "No limit" },
+  { label: "1 month", value: { months: 1 } },
+  { label: "14 days", value: { days: 14 } },
+  { label: "36 hours", value: { hours: 36 } },
+];
+
 const UTC_TIMEZONE: TimezoneData = {
   name: "UTC",
   longName: "Coordinated Universal Time",
@@ -120,6 +128,8 @@ function App() {
   const [range, setRange] = useState<TzRange>(getDefaultTzRange());
   const [allowedTimeRange, setAllowedTimeRange] = useState<AllowedTimeRange>("all");
   const [includeTodayInQuickRanges, setIncludeTodayInQuickRanges] = useState(false);
+  const [maxRangeLabel, setMaxRangeLabel] = useState(MAX_RANGE_CHOICES[0].label);
+  const maxRange = MAX_RANGE_CHOICES.find(({ label }) => label === maxRangeLabel)?.value;
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -215,6 +225,7 @@ function App() {
             disableSeconds: true,
             allowedTimeRange,
             includeTodayInQuickRanges,
+            maxRange,
           }}
         />
         <Button onClick={toggleTimezone} variant="outline">
@@ -248,6 +259,21 @@ function App() {
         >
           {includeTodayInQuickRanges ? "Included" : "Not included"}
         </Button>
+      </Flex>
+      <Flex gap={8} mt={8} align="center" wrap="wrap">
+        <Text size="sm" fw={600}>
+          Max range:
+        </Text>
+        {MAX_RANGE_CHOICES.map(({ label }) => (
+          <Button
+            key={label}
+            size="xs"
+            variant={maxRangeLabel === label ? "filled" : "outline"}
+            onClick={() => setMaxRangeLabel(label)}
+          >
+            {label}
+          </Button>
+        ))}
       </Flex>
     </Box>
   );

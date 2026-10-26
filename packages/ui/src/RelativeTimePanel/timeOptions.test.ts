@@ -95,4 +95,18 @@ describe("Temporal quick ranges", () => {
     expect(lastMinute?.lineBreak).toBe(true);
     expect(options.at(-1)?.lineBreak).toBe(false);
   });
+
+  it("hides quick ranges longer than the maximum range", () => {
+    const labels = getTimeOptions("UTC", { maxRange: { days: 14 } }).map(({ label }) => label);
+
+    expect(labels).toContain("Last 14 days");
+    expect(labels).toContain("Next 14 days");
+    expect(labels).not.toContain("Last 30 days");
+    expect(labels).not.toContain("Next 30 days");
+
+    const hourLabels = getTimeOptions("UTC", { maxRange: { hours: 6 } }).map(({ label }) => label);
+    expect(hourLabels).toContain("Last 6 hours");
+    expect(hourLabels).not.toContain("Last 12 hours");
+    expect(hourLabels).not.toContain("Today");
+  });
 });

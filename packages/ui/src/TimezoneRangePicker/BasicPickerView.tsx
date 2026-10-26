@@ -8,7 +8,7 @@ import { usePopoverContext } from "../Provider/PopoverProvider";
 import { getTimeOptions } from "../RelativeTimePanel/timeOptions";
 import quickStyles from "../RelativeTimePanel/index.module.css";
 import { TzRange } from "../interfaces";
-import { DATEFORMAT, getAllowedDateBounds } from "../util/dateTime";
+import { DATEFORMAT, getAllowedDateBounds, getMaxRangeDateBounds } from "../util/dateTime";
 import styled from "./index.module.css";
 
 interface BasicPickerViewProps {
@@ -41,17 +41,25 @@ export const BasicPickerView: FC<BasicPickerViewProps> = ({ tzRange, onAdvanced 
       disableHours: true,
       allowedTimeRange: tzRange.options?.allowedTimeRange,
       includeTodayInQuickRanges: tzRange.options?.includeTodayInQuickRanges,
+      maxRange: tzRange.options?.maxRange,
     });
   }, [
     tzRange.timezone.name,
     tzRange.options?.allowedTimeRange,
     tzRange.options?.includeTodayInQuickRanges,
+    tzRange.options?.maxRange,
   ]);
 
-  const dateBounds = getAllowedDateBounds(
+  const allowedBounds = getAllowedDateBounds(
     tzRange.timezone.name,
     tzRange.options?.allowedTimeRange
   );
+  // While the end of a range is being picked, only days within maxRange of its start are enabled.
+  const [pendingStart, pendingEnd] = dateRange;
+  const dateBounds =
+    pendingStart && !pendingEnd
+      ? getMaxRangeDateBounds(pendingStart, tzRange.options?.maxRange, allowedBounds)
+      : allowedBounds;
 
   const applyDateRange = ([startDate, endDate]: DateRangeValue) => {
     setDateRange([startDate, endDate]);

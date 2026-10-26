@@ -1,6 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  exceedsMaxRange,
+  formatRangeDuration,
+  getMaxRangeDateBounds,
+  validateMaxRange,
   formatShortDate,
   formatTwelveHourTime,
   getAllowedDateBounds,
@@ -128,5 +132,42 @@ describe("Temporal timezone conversion", () => {
 
     expect(getCurrentDate(range)).toBe("2024/01/02");
     expect(getCurrentTime(range)).toBe("08:30:45");
+  });
+});
+
+describe("Maximum range", () => {
+  it("describes durations for messages", () => {
+    expect(formatRangeDuration({ months: 1 })).toBe("1 month");
+    expect(formatRangeDuration({ weeks: 2, days: 3 })).toBe("2 weeks 3 days");
+    expect(formatRangeDuration({ hours: 36 })).toBe("36 hours");
+  });
+
+  it("measures months on the calendar from the start", () => {
+    const start = parseDateTime("2024/01/31", "00:00:00");
+    // Jan 31 + 1 month clamps to Feb 29 in a leap year.
+    expect(exceedsMaxRange(start, parseDateTime("2024/02/29", "00:00:00"), { months: 1 })).toBe(false);
+    expect(exceedsMaxRange(start, parseDateTime("2024/03/01", "00:00:00"), { months: 1 })).toBe(true);
+    expect(exceedsMaxRange(start, parseDateTime("2030/01/01", "00:00:00"))).toBe(false);
+  });
+
+  it("validates a manual range", () => {
+    expect(validateMaxRange("2024/01/01", "09:00:00", "2024/01/31", "09:00:00", { days: 30 })).toBeNull();
+    expect(validateMaxRange("2024/01/01", "09:00:00", "2024/01/31", "09:00:01", { days: 30 })).toBe(
+      "Range must not exceed 30 days"
+    );
+  });
+
+  it("bounds the calendar around a picked start, within existing bounds", () => {
+    expect(getMaxRangeDateBounds("2024-03-15", { months: 1 })).toEqual({
+      minDate: "2024-02-15",
+      maxDate: "2024-04-15",
+    });
+    expect(getMaxRangeDateBounds("2024-03-15", { days: 10 }, { maxDate: "2024-03-20" })).toEqual({
+      minDate: "2024-03-05",
+      maxDate: "2024-03-20",
+    });
+    expect(getMaxRangeDateBounds("2024-03-15", undefined, { minDate: "2024-03-01" })).toEqual({
+      minDate: "2024-03-01",
+    });
   });
 });

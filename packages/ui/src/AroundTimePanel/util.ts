@@ -1,4 +1,5 @@
-import { getFutureDateTime, getPastDateTime } from "../util/dateTime";
+import { RangeDuration } from "../interfaces";
+import { exceedsMaxRange, getFutureDateTime, getPastDateTime, parseDateTime } from "../util/dateTime";
 
 export enum TimeOption {
   ThirtySeconds = "± 30 seconds",
@@ -83,3 +84,15 @@ export const getStartEndDateTime = (date: string | null, time: string, timeOptio
       };
   }
 };
+
+// Durations whose whole window (the time ± the duration) fits within maxRange.
+// The span does not depend on the chosen time, so a fixed reference time is used.
+export const getAllowedTimeOptions = (maxRange?: RangeDuration) =>
+  TIME_OPTIONS.filter((option) => {
+    const range = getStartEndDateTime("2000/01/01", "12:00:00", option);
+    return !exceedsMaxRange(
+      parseDateTime(range.startDate!, range.startTime),
+      parseDateTime(range.endDate!, range.endTime),
+      maxRange
+    );
+  });

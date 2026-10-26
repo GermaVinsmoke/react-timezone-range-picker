@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { TimezoneRangePickerOptions } from "../interfaces";
-import { nowInTimezone } from "../util/dateTime";
+import { exceedsMaxRange, nowInTimezone } from "../util/dateTime";
 
 export type QuickRangeUnit = "seconds" | "minutes" | "hours" | "days";
 
@@ -126,6 +126,15 @@ export const getTimeOptions = (
   const filtered = baseTimeOptions(now, options?.includeTodayInQuickRanges ?? false).filter(
     (option) => {
       if (!shouldIncludeUnit(option.unit, options)) return false;
+      if (
+        exceedsMaxRange(
+          Temporal.PlainDateTime.from(option.startTime),
+          Temporal.PlainDateTime.from(option.endTime),
+          options?.maxRange
+        )
+      ) {
+        return false;
+      }
       if (allowedTimeRange === "past") return option.direction === "past";
       if (allowedTimeRange === "future") return option.direction === "future";
       return true;
